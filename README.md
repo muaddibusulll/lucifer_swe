@@ -9,9 +9,9 @@ TODO
 
 ## Features
 
--Takes github repo
--Takes ticket
--Resolves it
+- Takes github repo
+- Takes ticket
+- Resolves it
 
 
 ![alt text](lucifer_wings_art.webp)
