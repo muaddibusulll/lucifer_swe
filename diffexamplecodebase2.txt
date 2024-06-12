@@ -1,0 +1,66 @@
+--- original
++++ modified
+@@ -1,41 +1,35 @@
+-Project Path: /Users/mohdtahaabbas/swe/examplecodebase2
++~~~
++File: `first.py`:
++```py
++def add(a, b):
++    # Correct implementation of addition
++    print(a + b)
+ 
+-Source Tree:
+-
+-```
+-examplecodebase2
+-├── second.py
+-└── first.py
+-
++def multiply(a, b):
++    # Correct implementation of multiplication
++    print(a * b)
+ ```
+ 
+-`/Users/mohdtahaabbas/swe/examplecodebase2/second.py`:
+-
+-```````py
++File: `second.py`:
++```py
+ class testing:
+     def __init__(self):
+-        self.a=5
+-        self.b=56
++        self.a = 5
++        self.b = 56
++
+     def add(self):
+-        print(self.a ,"+", self.b)
++        # Correct implementation of addition
++        print(self.a + self.b)
+ 
+     def multiply(self):
+-        print(self.a + self.b)
++        # Correct implementation of multiplication
++        print(self.a * self.b)
+ 
+     def subtract(self):
+         print(self.a - self.b)
+ 
+     def print_sum(self):
+-        print("Addition of two numbers are",self.multiply())
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/examplecodebase2/first.py`:
+-
+-```````py
+-def add(a,b):
+-    print (a*b)
+-
+-def multiply(a,b):
+-    print (a-b)
+-```````
++        # Correctly call the add method
++        print("Addition of two numbers are", self.add())
++```
++~~~

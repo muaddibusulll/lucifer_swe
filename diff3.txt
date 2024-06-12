@@ -1,0 +1,29 @@
+--- original
++++ modified
+@@ -1,19 +1,8 @@
+-Project Path: /Users/mohdtahaabbas/swe/examplecodebase
+-
+-Source Tree:
+-
++~~~
++File: `hello.py`:
++```py
++a = 5
++b = 7
++print("sum is", a + b)
+ ```
+-examplecodebase
+-├── hello.py
+-├── bye.py
+-└── prompt.txt
+-
+-```
+-
+-`/Users/mohdtahaabbas/swe/examplecodebase/hello.py`:
+-
+-```````py
+-a=5
+-b=7
+-print("sum is", "a+b")
+-```````
++~~~
