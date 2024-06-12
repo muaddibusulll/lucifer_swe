@@ -1,1 +1,1 @@
-addition printing is wrong in hello.py
+function names signify what they do but their implementations are wrong

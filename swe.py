@@ -3,9 +3,10 @@ import difflib
 import os
 from planner import planner_prompt, parse_response
 from coder import coder_prompt
+from writer import validate_response, save_code_to_project
 import json
 # Set your OpenAI API key
-_api_key =  '<YOUR_API_KEY>'
+_api_key =  '<API_KEY>'
 
 client=OpenAI(api_key=_api_key)
 
@@ -52,11 +53,6 @@ def get_gpt_solution(codebase, issue):
     return coder_inference(plan_dict, issue, codebase)
 
 
-
-
-    
-    
-
 def compare_codebases(original, modified):
     original_lines = original.splitlines()
     modified_lines = modified.splitlines()
@@ -65,7 +61,7 @@ def compare_codebases(original, modified):
 
 def main():
     # Input file paths
-    codebase_file = '/Users/mohdtahaabbas/swe/examplecodebase/prompt.txt'
+    codebase_file = '/Users/mohdtahaabbas/swe/examplecodebase2/examplecodebase2.txt'
     issue_file = '/Users/mohdtahaabbas/swe/issue.txt'
 
     # Read the codebase and issue
@@ -76,17 +72,25 @@ def main():
     solution = get_gpt_solution(codebase, issue)
 
     # Write the modified codebase to a new file
-    modified_codebase_file = 'modified_codebase1.txt'
+    modified_codebase_file = 'modified_codebase_examplecodebase2.txt'
     write_file(modified_codebase_file, solution)
 
     # Compare the original and modified codebases
     diff = compare_codebases(codebase, solution)
 
     # Output the difference
-    diff_file = 'diff1.txt'
+    diff_file = 'diffexamplecodebase2.txt'
     write_file(diff_file, diff)
+    print(validate_response(solution))
 
     print(f'Differences saved to {diff_file}')
+
+    print("writing to file")
+
+    save_code_to_project(validate_response(solution), codebase_file)
+
+    print("Done")
+
 
 if __name__ == '__main__':
 
