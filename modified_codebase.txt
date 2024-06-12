@@ -1,0 +1,15 @@
+```
+examplecodebase
+├── hello.py
+├── bye.py
+└── prompt.txt
+
+```
+
+`/Users/mohdtahaabbas/swe/examplecodebase/hello.py`:
+
+```````py
+a=5
+b=7
+print("sum is", a+b)
+```````
