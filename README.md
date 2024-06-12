@@ -6,7 +6,6 @@ This project is about creating something amazing.
 
 TODO
 
-![Project Diagram](images/project-diagram.png)
 
 ## Features
 
