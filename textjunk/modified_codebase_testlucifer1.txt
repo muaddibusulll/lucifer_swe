@@ -1,0 +1,185 @@
+~~~
+File: `setup.py`
+```py
+from setuptools import setup, find_packages
+
+setup(
+    name='mobula',
+    version='1.0.2',
+    description='A Lightweight & Flexible Deep Learning (Neural Network) Framework in Python',
+    author='wkcn',
+    author_email='wkcn@live.cn',
+    url='https://github.com/wkcn/mobula',
+    packages=find_packages(),
+    package_data={
+        '': ['*.md'],
+        'docs': ['docs/*.md'],
+        'examples': ['examples/*.py']
+    },
+    keywords='Deep Learning Framework in Python',
+    license='MIT',
+    classifiers=[
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'License :: OSI Approved :: MIT License'
+    ],
+    install_requires=[
+        'numpy',
+        'numpy_groupies'
+    ],
+    python_requires='>=3.9',
+)
+```
+
+File: `requirements.txt`
+```txt
+numpy
+numpy_groupies
+```
+
+File: `mobula/wrapper.py`
+```py
+from .layers.utils.LayerManager import *
+
+class name_scope(object):
+    def __init__(self, name):
+        self.name = name
+    def __enter__(self):
+        LayerManager.enter_scope(self.name)
+    def __exit__(self, *dummy):
+        LayerManager.exit_scope()
+
+get_scope_name = LayerManager.get_scope_name
+get_scope = LayerManager.get_scope
+get_layer = LayerManager.get_layer
+save_scope = LayerManager.save_scope 
+load_scope = LayerManager.load_scope
+
+def get_layers(name = get_scope_name()):
+    scope = get_scope(name)
+    return scope.get_layers()
+
+# operators
+from . import operators as O
+add = O.add
+subtract = O.subtract
+multiply = O.multiply 
+matmul = O.matmul 
+dot = O.dot
+positive = O.positive
+negative = O.negative
+reduce_mean = O.reduce_mean
+reduce_max = O.reduce_max
+reduce_min = O.reduce_min
+equal = O.equal
+not_equal = O.not_equal
+greater_equal = O.greater_equal
+greater = O.greater
+less_equal = O.less_equal
+less = O.less
+
+exp = O.exp
+log = O.log
+abs = O.abs
+```
+
+File: `mobula/layers/CrossEntropy.py`
+```py
+from .LossLayer import *
+
+class CrossEntropy(LossLayer):
+    def __init__(self, model, *args, **kwargs):
+        super().__init__(model, *args, **kwargs)
+    def reshape(self):
+        self.Y = 0.0 
+    def forward(self):
+        self.Y = np.mean(- np.multiply(self.label, np.log(self.X)) - \
+               np.multiply(1.0 - self.label, np.log(1.0 - self.X)))
+    def backward(self):
+        self.dX = (-self.label / self.X + (1.0 - self.label) / (1.0 - self.X)) * self.dY
+```
+
+File: `mobula/layers/MSE.py`
+```py
+from .LossLayer import *
+
+class MSE(LossLayer):
+    def __init__(self, model, *args, **kwargs):
+        super().__init__(model, *args, **kwargs)
+    def reshape(self):
+        self.Y = 0.0 
+    def forward(self):
+        self.d = (self.X - self.label)
+        self.Y = np.mean(np.square(self.d))
+    def backward(self):
+        self.dX = (2 * self.d) * self.dY
+```
+
+File: `mobula/layers/ContrastiveLoss.py`
+```py
+from .LossLayer import *
+
+class ContrastiveLoss(LossLayer):
+    def __init__(self, models, *args, **kwargs):
+        super().__init__(models, *args, **kwargs)
+        self.margin = kwargs.get("margin", 1.0)
+    def forward(self):
+        self.sim = (self.X[2] == 1).ravel()
+        n = self.sim.shape[0]
+        self.diff = self.X[0] - self.X[1]
+        dist_sq = np.sum(np.square(self.diff.reshape((n, -1))), 1)
+        self.dist = np.sqrt(dist_sq).reshape((n, 1))
+        df = (self.margin - self.dist).ravel()
+        self.bdf = ((~self.sim) & (df > 0))
+        self.Y = (np.sum(dist_sq[self.sim]) + np.sum(np.square(df[self.bdf]))) / (2.0 * n)
+    def backward(self):
+        n = self.sim.shape[0]
+        dX = np.zeros(self.X[0].shape)
+        dX[self.sim] = self.diff[self.sim] / n
+        dX[self.bdf] = (1.0 / n - self.margin / n / self.dist[self.bdf]) * self.diff[self.bdf]
+        self.dX[0] = self.dX[1] = dX * self.dY
+```
+
+File: `mobula/layers/Tanh.py`
+```py
+from .Layer import *
+
+class Tanh(Layer):
+    def __init__(self, model, *args, **kwargs):
+        super().__init__(model, *args, **kwargs)
+    def reshape(self):
+        self.Y = np.zeros(self.X.shape)
+    def forward(self):
+        self.Y = 2.0 / (1.0 + np.exp(-2.0 * self.X)) - 1.0
+    def backward(self):
+        self.dX = np.multiply(self.dY, 1.0 - np.square(self.Y))
+```
+
+File: `mobula/layers/BatchNorm.py`
+```py
+from .Layer import *
+
+class BatchNorm(Layer):
+    def __init__(self, model, *args, **kwargs):
+        super().__init__(model, *args, **kwargs)
+        self.momentum = kwargs.get('momentum', 0.9)
+        self.eps = kwargs.get('eps', 1e-5)
+        self.use_global_stats = kwargs.get('use_global_stats', False)
+        self.axis = kwargs.get('axis', 1)
+    def reshape(self):
+        assert 0 <= self.axis < self.X.ndim
+        self.cshape = [1] * self.X.ndim
+        self.cshape[self.axis] = self.X.shape[self.axis]
+        self.valid_axes = tuple([i for i in range(self.X.ndim) if i != self.axis])
+
+        self.Y = np.zeros(self.X.shape)
+        self.W = np.ones(self.cshape)
+        self.b = np.zeros(self.cshape)
+        self.moving_mean = np.zeros(self.cshape)
+        self.moving_var = np.ones(self.cshape)
+    def forward(self):
+        if self.is_training() and not self.use_global_stats:
+            self.batch_mean = np.mean(self.X, self.valid_axes, keepdims=True)
+            self.batch_var = np.mean(np.square(self.X - self.batch_mean), self.valid_axes, keepdims=True)
+            self.moving

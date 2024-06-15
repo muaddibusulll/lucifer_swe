@@ -1,0 +1,5795 @@
+--- original
++++ modified
+@@ -1,230 +1,93 @@
+-Project Path: /Users/mohdtahaabbas/swe/mobula
++~~~
++File: `setup.py`
++```py
++from setuptools import setup, find_packages
+ 
+-Source Tree:
+-
+-```
+-mobula
+-├── mobula
+-│   ├── wrapper.py
+-│   ├── layers
+-│   │   ├── CrossEntropy.py
+-│   │   ├── MSE.py
+-│   │   ├── ContrastiveLoss.py
+-│   │   ├── Tanh.py
+-│   │   ├── BatchNorm.py
+-│   │   ├── Slice.py
+-│   │   ├── FC.py
+-│   │   ├── Concat.py
+-│   │   ├── LossLayer.py
+-│   │   ├── SmoothL1Loss.py
+-│   │   ├── L1Loss.py
+-│   │   ├── Reshape.py
+-│   │   ├── __init__.py
+-│   │   ├── utils
+-│   │   │   ├── VModel.py
+-│   │   │   ├── MultiInput.py
+-│   │   │   ├── MultiOutput.py
+-│   │   │   ├── __init__.py
+-│   │   │   ├── NullNet.py
+-│   │   │   ├── Saver.py
+-│   │   │   ├── Defines.py
+-│   │   │   └── LayerManager.py
+-│   │   ├── Crop.py
+-│   │   ├── SplitTest.py
+-│   │   ├── PReLU.py
+-│   │   ├── ReLU.py
+-│   │   ├── SigmoidCrossEntropy.py
+-│   │   ├── Layer.py
+-│   │   ├── Eltwise.py
+-│   │   ├── ConvT.py
+-│   │   ├── SoftmaxWithLoss.py
+-│   │   ├── Dropout.py
+-│   │   ├── Conv.py
+-│   │   ├── Accuracy.py
+-│   │   ├── Pool.py
+-│   │   ├── Sigmoid.py
+-│   │   ├── MergeTest.py
+-│   │   ├── Softmax.py
+-│   │   ├── Data.py
+-│   │   └── SELU.py
+-│   ├── operators
+-│   │   ├── MatMul.py
+-│   │   ├── Add.py
+-│   │   ├── Subtract.py
+-│   │   ├── Positive.py
+-│   │   ├── Log.py
+-│   │   ├── Negative.py
+-│   │   ├── Multiply.py
+-│   │   ├── ReduceMin.py
+-│   │   ├── Abs.py
+-│   │   ├── __init__.py
+-│   │   ├── ReduceMean.py
+-│   │   ├── Layer.py
+-│   │   ├── ReduceMax.py
+-│   │   ├── Exp.py
+-│   │   ├── Compare.py
+-│   │   └── Power.py
+-│   ├── Net.py
+-│   ├── __init__.py
+-│   ├── solvers
+-│   │   ├── Solver.py
+-│   │   ├── SGD.py
+-│   │   ├── __init__.py
+-│   │   ├── LRUpdater.py
+-│   │   └── Momentum.py
+-│   ├── Defines.py
+-│   └── testing.py
+-├── LICENSE
+-├── tests
+-│   ├── test_utils
+-│   │   ├── test_saver.py
+-│   │   ├── test_utils.py
+-│   │   └── test_layer_manager.py
+-│   ├── test_layers
+-│   │   ├── test_fc.py
+-│   │   ├── test_net.py
+-│   │   ├── test_convt.py
+-│   │   ├── test_mse.py
+-│   │   ├── test_activation.py
+-│   │   ├── test_reshape.py
+-│   │   ├── test_contrastive.py
+-│   │   ├── test_batchnorm.py
+-│   │   ├── test_eltwise.py
+-│   │   ├── test_crop.py
+-│   │   ├── test_acc.py
+-│   │   ├── test_concat.py
+-│   │   ├── test_slice.py
+-│   │   ├── test_data.py
+-│   │   ├── test_softmax.py
+-│   │   ├── test_dropout.py
+-│   │   ├── test_name.py
+-│   │   ├── test_pool.py
+-│   │   ├── test_eval.py
+-│   │   └── test_conv.py
+-│   └── test_ops
+-│       ├── test_abs.py
+-│       ├── test_power.py
+-│       ├── test_add.py
+-│       ├── test_subtract.py
+-│       ├── test_exp_log.py
+-│       ├── test_reduce.py
+-│       ├── test_mul.py
+-│       ├── test_compare.py
+-│       ├── test_ops.py
+-│       └── test_sign.py
+-├── docs
+-│   ├── performance.md
+-│   └── references.md
+-├── README.md
+-├── setup.py
+-├── examples
+-│   ├── mnist_train.py
+-│   ├── logo.py
+-│   ├── mnist_predict.py
+-│   ├── defines.py
+-│   ├── LeNet5.py
+-│   ├── mnist_kaggle.py
+-│   └── mobula.png
+-└── thirdparty
+-    └── numpy-groupies
+-
++setup(
++    name='mobula',
++    version='1.0.2',
++    description='A Lightweight & Flexible Deep Learning (Neural Network) Framework in Python',
++    author='wkcn',
++    author_email='wkcn@live.cn',
++    url='https://github.com/wkcn/mobula',
++    packages=find_packages(),
++    package_data={
++        '': ['*.md'],
++        'docs': ['docs/*.md'],
++        'examples': ['examples/*.py']
++    },
++    keywords='Deep Learning Framework in Python',
++    license='MIT',
++    classifiers=[
++        'Programming Language :: Python',
++        'Programming Language :: Python :: 3',
++        'Topic :: Scientific/Engineering :: Mathematics',
++        'License :: OSI Approved :: MIT License'
++    ],
++    install_requires=[
++        'numpy',
++        'numpy_groupies'
++    ],
++    python_requires='>=3.6',
++)
+ ```
+ 
+-`/Users/mohdtahaabbas/swe/mobula/mobula/wrapper.py`:
++File: `requirements.txt`
++```
++numpy
++numpy_groupies
++```
+ 
+-```````py
+-from .layers.utils.LayerManager import *
+-
+-class name_scope(object):
+-    def __init__(self, name):
+-        self.name = name
+-    def __enter__(self):
+-        LayerManager.enter_scope(self.name)
+-    def __exit__(self, *dummy):
+-        LayerManager.exit_scope()
+-
+-get_scope_name = LayerManager.get_scope_name
+-get_scope = LayerManager.get_scope
+-get_layer = LayerManager.get_layer
+-save_scope = LayerManager.save_scope 
+-load_scope = LayerManager.load_scope
+-
+-def get_layers(name = get_scope_name()):
+-    scope = get_scope(name)
+-    return scope.get_layers()
+-
+-
+-# operators
+-from . import operators as O
+-add = O.add
+-subtract = O.subtract
+-multiply = O.multiply 
+-matmul = O.matmul 
+-dot = O.dot
+-positive = O.positive
+-negative = O.negative
+-reduce_mean = O.reduce_mean
+-reduce_max = O.reduce_max
+-reduce_min = O.reduce_min
+-equal = O.equal
+-not_equal = O.not_equal
+-greater_equal = O.greater_equal
+-greater = O.greater
+-less_equal = O.less_equal
+-less = O.less
+-
+-exp = O.exp
+-log = O.log
+-abs = O.abs
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/CrossEntropy.py`:
+-
+-```````py
++File: `mobula/layers/CrossEntropy.py`
++```py
+ from .LossLayer import *
++import numpy as np
+ 
+ class CrossEntropy(LossLayer):
+     def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
++        super().__init__(model, *args, **kwargs)
++
+     def reshape(self):
+         self.Y = 0.0 
++
+     def forward(self):
+-        self.Y = np.mean(- np.multiply(self.label, np.log(self.X)) - \
+-               np.multiply(1.0 - self.label, np.log(1.0 - self.X)))
++        self.Y = np.mean(- np.multiply(self.label, np.log(self.X + 1e-15)) - \
++               np.multiply(1.0 - self.label, np.log(1.0 - self.X + 1e-15)))
++
+     def backward(self):
+-        self.dX = (-self.label / self.X + (1.0 - self.label) / (1.0 - self.X)) * self.dY
++        self.dX = (-self.label / (self.X + 1e-15) + (1.0 - self.label) / (1.0 - self.X + 1e-15)) * self.dY
++```
+ 
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/MSE.py`:
+-
+-```````py
++File: `mobula/layers/MSE.py`
++```py
+ from .LossLayer import *
++import numpy as np
+ 
+ class MSE(LossLayer):
+     def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
++        super().__init__(model, *args, **kwargs)
++
+     def reshape(self):
+         self.Y = 0.0 
++
+     def forward(self):
+         self.d = (self.X - self.label)
+         self.Y = np.mean(np.square(self.d))
++
+     def backward(self):
+         self.dX = (2 * self.d) * self.dY
++```
+ 
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/ContrastiveLoss.py`:
+-
+-```````py
++File: `mobula/layers/ContrastiveLoss.py`
++```py
+ from .LossLayer import *
++import numpy as np
+ 
+ class ContrastiveLoss(LossLayer):
+     def __init__(self, models, *args, **kwargs):
+-        # models = [X1, X2, sim]
+-        LossLayer.__init__(self, models, *args, **kwargs)
++        super().__init__(models, *args, **kwargs)
+         self.margin = kwargs.get("margin", 1.0)
++
+     def forward(self):
+         self.sim = (self.X[2] == 1).ravel()
+         n = self.sim.shape[0]
+@@ -234,44 +97,47 @@
+         df = (self.margin - self.dist).ravel()
+         self.bdf = ((~self.sim) & (df > 0))
+         self.Y = (np.sum(dist_sq[self.sim]) + np.sum(np.square(df[self.bdf]))) / (2.0 * n)
++
+     def backward(self):
+         n = self.sim.shape[0]
+         dX = np.zeros(self.X[0].shape)
+         dX[self.sim] = self.diff[self.sim] / n
+         dX[self.bdf] = (1.0 / n - self.margin / n / self.dist[self.bdf]) * self.diff[self.bdf]
+         self.dX[0] = self.dX[1] = dX * self.dY
++```
+ 
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Tanh.py`:
+-
+-```````py
++File: `mobula/layers/Tanh.py`
++```py
+ from .Layer import *
++import numpy as np
+ 
+ class Tanh(Layer):
+     def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
++        super().__init__(model, *args, **kwargs)
++
+     def reshape(self):
+         self.Y = np.zeros(self.X.shape)
++
+     def forward(self):
+         self.Y = 2.0 / (1.0 + np.exp(-2.0 * self.X)) - 1.0
++
+     def backward(self):
+         self.dX = np.multiply(self.dY, 1.0 - np.square(self.Y))
++```
+ 
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/BatchNorm.py`:
+-
+-```````py
++File: `mobula/layers/BatchNorm.py`
++```py
+ from .Layer import *
++import numpy as np
+ 
+ class BatchNorm(Layer):
+     def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
++        super().__init__(model, *args, **kwargs)
+         self.momentum = kwargs.get('momentum', 0.9)
+         self.eps = kwargs.get('eps', 1e-5)
+         self.use_global_stats = kwargs.get('use_global_stats', False)
+         self.axis = kwargs.get('axis', 1)
++
+     def reshape(self):
+         assert 0 <= self.axis < self.X.ndim
+         self.cshape = [1] * self.X.ndim
+@@ -279,5434 +145,28 @@
+         self.valid_axes = tuple([i for i in range(self.X.ndim) if i != self.axis])
+ 
+         self.Y = np.zeros(self.X.shape)
+-        # (1, C, 1, 1)
+         self.W = np.ones(self.cshape)
+-        # (1, C, 1, 1)
+         self.b = np.zeros(self.cshape)
+-        # Current Mean
+         self.moving_mean = np.zeros(self.cshape)
+         self.moving_var = np.ones(self.cshape)
++
+     def forward(self):
+         if self.is_training() and not self.use_global_stats:
+-            # The mean and var of this batch
+-            self.batch_mean = np.mean(self.X, self.valid_axes, keepdims = True)
+-            self.batch_var = np.mean(np.square(self.X - self.batch_mean), self.valid_axes, keepdims = True) # Is it faster than np.var?
+-            # compute moving mean and moving var
++            self.batch_mean = np.mean(self.X, self.valid_axes, keepdims=True)
++            self.batch_var = np.mean(np.square(self.X - self.batch_mean), self.valid_axes, keepdims=True)
+             self.moving_mean = self.moving_mean * self.momentum + self.batch_mean * (1 - self.momentum)
+             self.moving_var = self.moving_var * self.momentum + self.batch_var * (1 - self.momentum)
+         else:
+             self.batch_mean = self.moving_mean
+             self.batch_var = self.moving_var
+-        # Normalize
+-        # [TODO] when eps == 0 ?
++
+         self.nd = 1.0 / np.sqrt(self.batch_var + self.eps)
+         self.nx = (self.X - self.batch_mean) * self.nd
+-        # Scale and Shift
+         self.Y = np.multiply(self.nx, self.W) + self.b
++
+     def backward(self):
+-        # Compute self.dX, self.dW, self.db
+         dnx = np.multiply(self.dY, self.W)
+         xsm = self.X - self.batch_mean
+         m = self.X.shape[0]
+-        dvar = np.sum(np.multiply(dnx, xsm), self.valid_axes, keepdims = True) * (-0.5) * np.power(self.nd, 3.0)
+-        dmean = -self.nd * np.sum(dnx, self.valid_axes, keepdims = True) - dvar * np.mean(xsm, self.valid_axes, keepdims = True) * 2.0
+-        self.dX = dnx * self.nd + dvar * xsm * (2.0 / m) + dmean * (1.0 / m)
+-        self.dW = np.sum(self.dY * self.nx, self.valid_axes, keepdims = True)
+-        self.db = np.sum(self.dY, self.valid_axes, keepdims = True)
+-    @property
+-    def params(self):
+-        return [self.W, self.b, self.moving_mean, self.moving_var]
+-    @property
+-    def grads(self):
+-        return [self.dW, self.db]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Slice.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Slice(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1)
+-        if "slice_point" in kwargs:
+-            self.slice_points = [kwargs["slice_point"]]
+-        else:
+-            self.slice_points = kwargs.get("slice_points", [])
+-        self.set_output(len(self.slice_points) + 1)
+-    def reshape(self):
+-        self.slices = [[slice(None)] * self.X.ndim for _ in range(len(self.slice_points) + 1)]
+-        last = None
+-        for i, k in enumerate(self.slice_points):
+-            s = slice(last, k)
+-            self.slices[i][self.axis] = s
+-            last = k
+-            self.Y[i] = self.X[s]
+-        s = slice(last, None)
+-        self.slices[-1][self.axis] = s
+-        self.slices = [tuple(s) for s in self.slices]
+-        self.Y[-1] = self.X[s] 
+-    def forward(self):
+-        self.Y = [self.X[s] for s in self.slices]
+-    def backward(self):
+-        self.dX = np.concatenate(self.dY, axis = self.axis)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/FC.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class FC(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.W = None 
+-        self.b = None 
+-        self.XN = 0
+-        self.C = 0
+-        self.dim_out = kwargs["dim_out"]
+-    def reshape(self):
+-        # NCHW
+-        self.XN = self.X.shape[0]
+-        self.C = self.X.size // self.XN 
+-        self.Y = np.zeros((self.XN, self.dim_out))
+-        if self.W is None:
+-            self.W = Xavier((self.dim_out ,self.C))
+-            self.b = np.zeros((self.dim_out, ))
+-
+-    def forward(self):
+-        # Y = W * X + b
+-        self.Y = np.dot(self.X.reshape((self.XN, self.C)), self.W.T) + self.b.reshape((1, self.dim_out))
+-    def backward(self):
+-        self.dX = np.dot(self.dY, self.W)
+-        self.dW = np.dot(self.dY.T, self.X.reshape((self.XN, self.C)))
+-        self.db = np.sum(self.dY, 0).reshape(self.b.shape)
+-    @property
+-    def params(self):
+-        return [self.W, self.b]
+-    @property
+-    def grads(self):
+-        return [self.dW, self.db]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Concat.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Concat(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        Layer.__init__(self, models, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1)
+-    def reshape(self):
+-        last = 0
+-        self.slices = [[slice(None)] * self.X[0].ndim for _ in range(len(self.X))]
+-        for i, x in enumerate(self.X):
+-            ss = x.shape[self.axis]
+-            self.slices[i][self.axis] = slice(last, last + ss)
+-            last += ss
+-        self.slices = [tuple(s) for s in self.slices]
+-
+-        shp = list(self.X[0].shape)
+-        shp[self.axis] = last
+-        self.Y = np.zeros(shp)
+-    def forward(self):
+-        self.Y = np.concatenate(self.X, axis = self.axis)
+-    def backward(self):
+-        self.dX = [self.dY[s] for s in self.slices]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/LossLayer.py`:
+-
+-```````py
+-from .Layer import *
+-from .utils.VModel import *
+-
+-class LossLayer(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        if "label" in kwargs:
+-            self.label = kwargs["label"]
+-        self.dY = np.array(1.0)
+-        self.Y = 0.0
+-    @property
+-    def loss(self):
+-        return np.mean(self.Y)
+-    @property
+-    def label(self):
+-        return self.__label.Y
+-    @label.setter
+-    def label(self, value):
+-        if isinstance(value, np.ndarray): 
+-            self.__label = VModel()
+-            self.__label.Y = value 
+-        else:
+-            self.__label = value
+-    @property
+-    def dY(self):
+-        return self.__dY.ravel()
+-    @dY.setter
+-    def dY(self, value):
+-        self.__dY = value
+-    @property
+-    def Y(self):
+-        return self.__Y.reshape((1,1,1,1))
+-    @Y.setter
+-    def Y(self, value):
+-        self.__Y = np.array(value)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/SmoothL1Loss.py`:
+-
+-```````py
+-from .LossLayer import *
+-
+-class SmoothL1Loss(LossLayer):
+-    def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = 0.
+-    def forward(self):
+-        # TODO: optimize
+-        a = np.abs(self.X)
+-        bm = (a < 1)
+-        bo = ~bm
+-        z = np.zeros(self.X.shape) 
+-        z[bm] = np.square(a[bm]) * 0.5
+-        z[bo] = a[bo] - 0.5
+-        self.Y = np.mean(z)
+-    def backward(self):
+-        br = (self.X >= 1)
+-        bl = (self.X <= -1)
+-        bm = ~(br | bl) # |x| < 1
+-        self.dX = np.ones(self.X.shape)
+-        #self.dX[br] = 1
+-        self.dX[bl] = -1
+-        self.dX[bm] = self.X[bm]
+-        self.dX *= self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/L1Loss.py`:
+-
+-```````py
+-from .LossLayer import *
+-
+-class L1Loss(LossLayer):
+-    def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = 0.
+-    def forward(self):
+-        self.Y = np.mean(np.abs(self.X))
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-        self.dX[self.X < 0] = -1
+-        self.dX[self.X > 0] = 1
+-        self.dX *= self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Reshape.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Reshape(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.dims = kwargs.get("dims", np.array([-1, -1, -1, -1]))
+-    def reshape(self):
+-        xshp = self.X.shape
+-        self.yshp = list(xshp)
+-        k = None
+-        v = 1
+-        for i, d in enumerate(self.__dims):
+-            if d == -1:
+-                k = i
+-            else:
+-                if d > 0:
+-                    self.yshp[i] = d
+-                v *= self.yshp[i]
+-        if k is not None:
+-            self.yshp[k] = self.X.size // v
+-        self.Y = self.X.reshape(self.yshp)
+-    def forward(self):
+-        self.Y = self.X.reshape(self.yshp)
+-    def backward(self):
+-        self.dX = self.dY.reshape(self.X.shape)
+-
+-
+-    @property
+-    def dims(self):
+-        return self.__dims
+-    @dims.setter
+-    def dims(self, value):
+-        value = np.array(value)
+-        if np.sum(value == -1) > 1:
+-            raise ValueError("There is one -1 at most.")
+-        self.__dims = value
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/__init__.py`:
+-
+-```````py
+-import sys
+-import os
+-
+-PATH = os.path.dirname(__file__)
+-sys.path.append(PATH)
+-thirdparties = ['numpy-groupies']
+-for name in thirdparties:
+-    sys.path.append(os.path.join(PATH, '../../thirdparty/', name))
+-
+-# Data Layer
+-from .Data import *
+-
+-# Layers
+-from .FC import *
+-from .Conv import *
+-from .ConvT import *
+-from .BatchNorm import *
+-
+-# Layers without learning
+-from .Pool import *
+-from .Dropout import *
+-from .Reshape import *
+-from .Crop import *
+-
+-# Activate Layer
+-from .Sigmoid import *
+-from .ReLU import *
+-from .PReLU import *
+-from .SELU import *
+-from .Tanh import *
+-from .Softmax import *
+-
+-# Multi IO Layer
+-from .Concat import *
+-from .Slice import *
+-from .Eltwise import *
+-
+-# Cost Layer
+-from .MSE import *
+-from .CrossEntropy import *
+-from .SigmoidCrossEntropy import *
+-from .SoftmaxWithLoss import *
+-from .L1Loss import *
+-from .SmoothL1Loss import *
+-from .ContrastiveLoss import *
+-
+-# Evaluation Layer (No Backward)
+-from .Accuracy import *
+-
+-# Test Layer
+-from .MergeTest import *
+-from .SplitTest import *
+-
+-# Operators
+-from ..operators import *
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/VModel.py`:
+-
+-```````py
+-class VModel(object):
+-    def __init__(self, data = None):
+-        self.Y = data
+-    def input_models(self):
+-        return []
+-    def input_models_with_index(self):
+-        return []
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/MultiInput.py`:
+-
+-```````py
+-from .MultiOutput import *
+-import weakref
+-
+-class MultiInputItem(object):
+-    def __init__(self, models):
+-        self.models = models
+-    def __getitem__(self, i):
+-        return self.models[i].Y
+-    def __setitem__(self, i, value):
+-        self.models[i].Y = value
+-    def __iter__(self):
+-        for md in self.models:
+-            yield md.Y
+-    def __len__(self):
+-        return len(self.models)
+-
+-class MultiInput(object):
+-    def __init__(self, model):
+-        self.model = model
+-        self.items = MultiInputItem(model)
+-    @property
+-    def Y(self):
+-        return self.items
+-    def __getitem__(self, i):
+-        return self.model[i]
+-    def __len__(self):
+-        return len(self.model)
+-    def __iter__(self):
+-        for md in self.model:
+-            yield md
+-    def input_models(self):
+-        for md in self.model:
+-            yield get_layer_parent(md)
+-    def input_models_with_index(self):
+-        for md in self.model:
+-            if type(md) == YLayer:
+-                yield (get_layer_parent(md), md.i)
+-            else:
+-                yield (get_layer_parent(md), 0)
+-
+-class XLayer(object):
+-    def __init__(self, model, i):
+-        # Avoid bidirection reference
+-        self.model = weakref.ref(model)
+-        self.i = i
+-    @property
+-    def dX(self):
+-        return self.model().dX[self.i]
+-
+-class WeakrefLayer(object):
+-    def __init__(self, model):
+-        # Avoid bidirection reference
+-        self.model = weakref.ref(model)
+-    @property
+-    def dX(self):
+-        return self.model().dX
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/MultiOutput.py`:
+-
+-```````py
+-import weakref
+-
+-class YLayer(object):
+-    def __init__(self, model, i):
+-        self.model = model
+-        self.i = i
+-        self.dY = None
+-        self.next_layers = []
+-    @property
+-    def Y(self):
+-        return self.model.Y[self.i]
+-    @Y.setter
+-    def Y(self, value):
+-        self.model.Y[self.i] = value
+-    @property
+-    def shape(self):
+-        return self.model.Y[self.i].shape
+-    def forward(self):
+-        self.model.forward()
+-    def backward(self):
+-        self.model.backward()
+-    def reshape(self):
+-        self.model.reshape()
+-    def input_models(self):
+-        yield self.model
+-    def input_models_with_index(self):
+-        yield (self.model, self.i)
+-
+-class MultiDY(object):
+-    def __init__(self, model):
+-        self.model = weakref.proxy(model)
+-    def __getitem__(self, i):
+-        return self.model.get_YLayers(i).dY
+-    def __setitem__(self, i, value):
+-        self.model.get_YLayers(i).dY = value
+-    def __iter__(self): 
+-        for dy in self.model.get_YLayers():
+-            yield dy
+-    def __len__(self):
+-        return len(self.model.YLayers)
+-
+-def get_layer_parent(md):
+-    if isinstance(md, YLayer):
+-        return md.model
+-    return md
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/NullNet.py`:
+-
+-```````py
+-from .Defines import *
+-class NullNet:
+-    phase = TRAIN 
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/Saver.py`:
+-
+-```````py
+-import pickle
+-import numpy as np
+-
+-def save_layers(filename, layers, info = False):
+-    data = []
+-    for l in layers: 
+-        params = l.params
+-        if len(params) > 0:
+-            data.append((l.name, [p.tostring() for p in params]))
+-            if info:
+-                print (" - %s" % l.name)
+-    fout = open(filename, "wb")
+-    pickle.dump(data, fout, protocol = 2)
+-    fout.close()
+-
+-def load_layers(filename, layers, info = False):
+-    fin = open(filename, "rb")
+-    data = pickle.load(fin)
+-    fin.close()
+-    mapping = {}
+-    for i in range(len(data)):
+-        mapping[data[i][0]] = i
+-    for l in layers:
+-        if l.name in mapping:
+-            lp = data[mapping[l.name]][1]
+-            for j in range(len(l.params)):
+-                p = l.params[j]
+-                l.params[j][...] = np.fromstring(lp[j], dtype = p.dtype).reshape(p.shape) 
+-            if info:
+-                print (" - %s" % l.name)
+-
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/Defines.py`:
+-
+-```````py
+-#coding=utf-8
+-from ...Defines import *
+-import numpy as np
+-import numpy_groupies as npg
+-
+-def Xavier(shape):
+-    # shape: (dim_out, dim_in)
+-    R = np.random.random(shape)
+-    k = np.sqrt(6.0 / R.size)
+-    return -k + (2 * k) * R
+-
+-
+-def im2col(A, fshape, stride = 1):
+-    h, w = A.shape
+-    fh, fw = fshape
+-    s0, s1 = A.strides
+-    rows = h - fh + 1
+-    cols = w - fw + 1
+-    nw = (w - fw) // stride + 1
+-    nh = (h - fh) // stride + 1
+-    shp = fh, fw, rows, cols
+-    strd = s0, s1, s0, s1
+-    view = np.lib.stride_tricks.as_strided(A, shape = shp, strides = strd)
+-    i = np.tile(np.arange(0, cols, stride), nh) + np.repeat(np.arange(nh) * (stride * cols), nw)
+-    return view.reshape(fh * fw, -1)[:, i]
+-
+-
+-def get_idx_from_arg(a, arg, axis):
+-    shp = a.shape
+-    cp = np.cumprod(shp[::-1])[::-1]
+-    if axis == len(shp) - 1:
+-        m = 1
+-    else:
+-        m = cp[axis + 1]
+-    n = cp[0] // cp[axis]
+-    if m == 1:
+-        return np.arange(n) * cp[axis] + arg.ravel()
+-    return np.repeat(np.arange(n) * cp[axis], m) + np.tile(np.arange(m), n) + arg.ravel() * m 
+-
+-def get_val_from_idx(a, idx):
+-    return a.ravel()[idx]
+-
+-def get_val_from_arg(a, arg, axis):
+-    return a.ravel()[get_idx_from_arg(a, arg, axis)]
+-
+-def get_blocks(a, block_size):
+-    # block_size: 2 dims
+-    N, C, H, W = a.shape
+-    bh, bw = block_size
+-    H_cnt = H // bh 
+-    W_cnt = W // bw
+-    b = a[:, :, :H_cnt * bh, :W_cnt * bw].reshape((N, C, H_cnt, bh, -1)) 
+-    return np.transpose(b, (0, 1, 2, 4, 3)).reshape((N, C, H_cnt, W_cnt, bh, bw))
+-
+-def get_ndarray_addr(a):
+-    return a.__array_interface__['data'][0]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/utils/LayerManager.py`:
+-
+-```````py
+-import weakref
+-from .Saver import *
+-
+-class Scope(dict):
+-    def __init__(self, name = "", parent = None):
+-        dict.__init__(self)
+-        self.global_name = ("" if parent is None else parent.global_name) + "%s/" % name 
+-
+-    def get_layers(self):
+-        layers = []
+-        for name, scope in self.items():
+-            if name[-1] != '/':
+-                # layer
+-                layers.append(scope())
+-            else:
+-                # scope
+-                layers.extend(scope.get_layers())
+-        return layers 
+-
+-class LayerManagerClass(object):
+-    def __init__(self):
+-        self.root = Scope()
+-        self.cur_scope = self.root
+-        self.stack_scope = []
+-
+-    def new_layer(self, name, obj, auto_rename = False):
+-        scope = self.get_scope(self.split_scope_name(name))
+-        local_name = self.get_local_name(name, scope, auto_rename) 
+-        global_name = scope.global_name + local_name
+-        scope[local_name] = weakref.ref(obj)
+-        return global_name
+-
+-    def del_layer(self, name):
+-        scope = self.get_scope(self.split_scope_name(name))
+-        local_name = name.split('/')[-1]
+-        del scope[local_name]
+-        if len(scope) == 0:
+-            if scope != self.root:
+-                self.del_scope(name)
+-
+-    def get_layer(self, name):
+-        scope = self.get_scope(self.split_scope_name(name))
+-        local_name = name.split('/')[-1]
+-        return scope[local_name]()
+-
+-    def split_scope_name(self, name):
+-        return name[:name.rfind('/') + 1]
+-
+-    def get_scope(self, name = ""):
+-        if len(name) == 0:
+-            return self.cur_scope
+-        if name[-1] != '/':
+-            name += '/'
+-        is_root = (name[0] == '/')
+-        if is_root:
+-            scope = self.root
+-            sp = name.split('/')[1:-1]
+-        else:
+-            scope = self.cur_scope
+-            sp = name.split('/')[:-1]
+-        for sn in sp:
+-            snp = sn + '/'
+-            if snp not in scope:
+-                scope[snp] = Scope(sn, scope)
+-            scope = scope[snp]
+-        return scope
+-
+-    def del_scope(self, name):
+-        '''
+-            global_name | len(sp)
+-            ------------|--------
+-            /           | 2
+-            /a/         | 3
+-            /a/b/       | 4
+-            /a/b/c/     | 5
+-        '''
+-        st = []
+-        sp = name.split('/')[1:-1]
+-        scope = self.root
+-        for sn in sp:
+-            snp = sn + '/'
+-            scope = scope[snp]
+-            st.append((snp, scope)) # local_name, scope
+-        for i in range(len(st) - 1, 0, -1): # exclude 0
+-            snp, scope = st[i]
+-            if len(scope) == 0:
+-                del st[i - 1][1][snp]
+-            else:
+-                break
+-
+-    def get_local_name(self, name, scope, auto_rename):
+-        if name in scope:
+-            if auto_rename:
+-                i = 1 
+-                while True:
+-                    new_name = "%s_%d" % (name, i)
+-                    if new_name not in scope:
+-                        break
+-                    i += 1
+-                name = new_name
+-            else:
+-                raise NameError("Duplicate Layer Name %s" % global_name)
+-        return name
+-
+-    def enter_scope(self, name):
+-        # add global_name
+-        name = self.cur_scope.global_name + name
+-
+-        self.stack_scope.append(self.cur_scope)
+-        self.cur_scope = self.get_scope(name)
+-
+-    def exit_scope(self):
+-        self.cur_scope = self.stack_scope.pop()
+-
+-    def get_scope_name(self):
+-        return self.cur_scope.global_name
+-
+-    def save_scope(self, filename, scope_name = None):
+-        if scope_name is None:
+-            scope_name = self.get_scope_name()
+-        scope = self.get_scope(scope_name)
+-        save_layers(filename, scope.get_layers())
+-        print ("Saving Scope %s to %s Finished :-)" % (scope_name, filename))
+-
+-    def load_scope(self, filename, scope_name = None):
+-        if scope_name is None:
+-            scope_name = self.get_scope_name()
+-        scope = self.get_scope(scope_name)
+-        load_layers(filename, scope.get_layers())
+-        print ("Loading Scope %s from %s Finished :-)" % (scope_name, filename))
+-
+-LayerManager = LayerManagerClass()
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Crop.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Crop(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        # the type of models is list
+-        Layer.__init__(self, models[0], *args, **kwargs)
+-        self.R = models[1]
+-        self.axis = kwargs.get("axis", 2) # N,C,H,W
+-        self.offset = kwargs.get("offset", 0) # int or list
+-    def reshape(self):
+-        self.Y = np.zeros(self.R.shape)
+-        n = self.X.ndim - self.axis
+-        if type(self.offset) == int:
+-            self.axes = [slice(None)] * self.axis + [slice(self.offset, self.offset + self.R.Y.shape[i + self.axis]) for i in range(self.R.Y.ndim - self.axis)]
+-        else:
+-            assert len(self.offset) == n, "len(Crop.offset) must be the number of dims which will be cropped"
+-            self.axes = [slice(None)] * self.axis + [slice(o, o + self.R.Y.shape[i + self.axis]) for i, o in enumerate(self.offset)]
+-    def forward(self):
+-        self.Y = self.X[tuple(self.axes)]
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-        self.dX[tuple(self.axes)] = self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/SplitTest.py`:
+-
+-```````py
+-from .Layer import *
+-
+-# It's a test layer for multi output
+-# y1, y2 = SplitTest(x)()
+-# Notice: There is one more pair of brackets
+-
+-class SplitTest(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.set_output(2)
+-    def reshape(self):
+-        self.Y = [self.X[0::2], self.X[1::2]]
+-        self.dX = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = [self.X[0::2], self.X[1::2]]
+-    def backward(self):
+-        self.dX[0::2] = self.dY[0]
+-        self.dX[1::2] = self.dY[1]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/PReLU.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class PReLU(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        alpha = kwargs.get("alpha", 0.25)
+-        self.alpha = np.array(alpha)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.X.copy()
+-        self.Y[self.X < 0] *= self.alpha
+-    def backward(self):
+-        self.dX = self.dY.copy()
+-        self.dX[self.X <= 0] *= self.alpha
+-    @property
+-    def params(self):
+-        return [self.alpha]
+-    @property
+-    def grads(self):
+-        bx = self.X < 0
+-        return [np.sum(np.multiply(self.dY[bx], self.X[bx]))] if bx.any() else [0.0]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/ReLU.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class ReLU(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = np.maximum(self.X, 0.0)
+-    def backward(self):
+-        self.dX = self.dY.copy()
+-        self.dX[self.X <= 0] = 0.0
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/SigmoidCrossEntropy.py`:
+-
+-```````py
+-from .LossLayer import *
+-
+-class SigmoidCrossEntropy(LossLayer):
+-    def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = 0.0 
+-    def forward(self):
+-        e = np.clip(1.0 / (1.0 + np.exp(-self.X)), 1e-16, 1.0 - 1e-16)
+-        self.Y = (np.mean(- np.multiply(self.label, np.log(e)) - \
+-               np.multiply(1.0 - self.label, np.log(1.0 - e))))
+-    def backward(self):
+-        self.dX = (np.clip(1.0 / (1.0 + np.exp(-self.X)), 1e-16, 1.0 - 1e-16) - self.label) * self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Layer.py`:
+-
+-```````py
+-from .utils.Defines import * 
+-from .utils.MultiInput import *
+-from .utils.MultiOutput import *
+-from .utils.VModel import *
+-from .utils.NullNet import *
+-from .utils.LayerManager import *
+-
+-def is_layer(l):
+-    return isinstance(l, Layer) or isinstance(l, YLayer)
+-
+-def is_layer_lst(lst):
+-    for l in lst:
+-        if not is_layer(l):
+-            return False
+-    return True
+-
+-class Layer(object):
+-    def __init__(self, model, *args, **kwargs):
+-        # NCHW
+-        # (batch_size, dim_in, H, W)
+-        # V
+-        # (batch_size, dim_out, H, W)
+-
+-        model = self.base_init(model, *args, **kwargs)
+-
+-        # bidirection
+-        if model is not None:
+-            if is_layer(model):
+-                # Single Input 
+-                self.model = model
+-                self.model.next_layers.append(WeakrefLayer(self))
+-            elif type(model) == list:
+-                if is_layer_lst(model):
+-                    # It's a Multi Input Layer
+-                    self.model = MultiInput(model)
+-                    for i, mdi in enumerate(model):
+-                        mdi.next_layers.append(XLayer(self, i))
+-                    self.dX = [None] * len(model)
+-                else:
+-                    # for test
+-                    self.model = VModel() 
+-                    self.model.Y = model
+-            elif type(model) == np.ndarray:
+-                # For test
+-                self.model = VModel()
+-                self.model.Y = model
+-            else:
+-                raise TypeError("model must be a Layer or a List") 
+-        else:
+-            # for test
+-            self.model = VModel() 
+-
+-        self.net = NullNet 
+-
+-    def base_init(self, model, *args, **kwargs):
+-        name = None
+-        if model is not None:
+-            # For more models parameters
+-            if type(model) != list and len(args) > 0:
+-                lst = [model]
+-                for a in args:
+-                    if is_layer(a) or type(a) == np.ndarray:
+-                        lst.append(a)
+-                    else:
+-                        break
+-                args = args[len(lst) - 1:]
+-                if len(lst) > 1:
+-                    model = lst
+-
+-        if "name" in kwargs:
+-            name = kwargs["name"]
+-        elif len(args) > 0 and type(args[0]) == str:
+-            name = args[0]
+-
+-        # Name
+-        auto_rename = False 
+-        if name is None:
+-            name = self.__class__.__name__
+-            auto_rename = True
+-        self.name = LayerManager.new_layer(name, self, auto_rename = auto_rename)
+-
+-        self.next_layers = []
+-        self.lr = kwargs.get("lr", 1.0)
+-        self.args = args
+-        self.kwargs = kwargs
+-        return model
+-
+-    def reshape(self):
+-        pass
+-    def forward(self):
+-        pass
+-    def backward(self):
+-        pass
+-    def update(self, lr):
+-        params = self.params
+-        grads = self.grads
+-        for i in range(len(params)):
+-            params[i] -= grads[i] * (lr * self.lr)
+-    @property
+-    def params(self):
+-        return []
+-    @property
+-    def grads(self):
+-        return []
+-    @property
+-    def shape(self):
+-        return self.Y.shape
+-    @shape.setter
+-    def shape(self, value):
+-        raise RuntimeError("Don't Change Layer.shape")
+-    @property
+-    def X(self):
+-        return self.model.Y
+-    @X.setter
+-    def X(self, value):
+-        #raise RuntimeError("Don't Change Layer.X")
+-        self.model.Y = value
+-    def set_output(self, num):
+-        if num > 1:
+-            self.YLayers = [None] * num
+-            self.Y = [None] * num
+-            self.dY = MultiDY(self) 
+-        else:
+-            self.YLayers = None
+-            self.Y = None
+-            self.dY = None
+-    def __call__(self, value = None):
+-        if type(self.Y) == list:
+-            # For MultiOutput
+-            if value is None:
+-                return self.get_YLayers()
+-            return self.get_YLayers(value)
+-        # For Single Output
+-        return self 
+-    def __iter__(self):
+-        if type(self.Y) == list:
+-            for y in self.get_YLayers():
+-                yield y
+-        else:
+-            yield self
+-    def get_YLayers(self, i = None):
+-        if i == None:
+-            lst = []
+-            for i in range(len(self.YLayers)):
+-                try:
+-                    assert self.YLayers[i] != None
+-                    l = self.YLayers[i]
+-                except:
+-                    l = YLayer(self, i)
+-                    self.YLayers[i] = weakref.proxy(l)
+-                lst.append(l)
+-            return lst
+-
+-
+-        try:
+-            assert self.YLayers[i] != None
+-            l = self.YLayers[i]
+-        except:
+-            l = YLayer(self, i)
+-            self.YLayers[i] = weakref.proxy(l)
+-
+-        return l
+-    def is_training(self):
+-        return self.net.phase == TRAIN
+-    def input_models(self):
+-        yield get_layer_parent(self)
+-    def input_models_with_index(self):
+-        yield (get_layer_parent(self), 0)
+-    def forward_all(self):
+-        if self.model is not None:
+-            for md in self.model.input_models():
+-                md.forward_all()
+-        self.forward()
+-    def reshape_all(self):
+-        if self.model is not None:
+-            for md in self.model.input_models():
+-                md.reshape_all()
+-        self.reshape()
+-    def eval(self, datas = None):
+-        need_to_reshape = False
+-        if datas is not None:
+-            need_to_reshape = self.whether_to_reshape(datas)
+-            for data, value in datas.items():
+-                data.X = value
+-
+-        # check whether it has inited
+-        if need_to_reshape or not self.inited():
+-            self.reshape_all()
+-        self.forward_all()
+-        return self.Y
+-    def whether_to_reshape(self, datas):
+-        for data, value in datas.items():
+-            if type(data.X) != type(value):
+-                return True
+-            if type(data.X) != list:
+-                if data.X.shape != value.shape:
+-                    return True
+-            else:
+-                for a,b in zip(data.X, value):
+-                    if a.shape != b.shape:
+-                        return True
+-        return False
+-    def inited(self):
+-        return hasattr(self, "Y")
+-    def __str__(self):
+-        if not hasattr(self, "Y"):
+-            num_output = 1 # For not Data Layer
+-        elif self.Y is None:
+-            num_output = 0 # For Data Layer
+-        elif type(self.Y) != list:
+-            num_output = 1
+-        else:
+-            num_output = len(self.Y)
+-
+-        input_names = ["%s:%d" % (l.name, i) for l,i in self.model.input_models_with_index()] if self.model is not None else []
+-        if len(input_names) > 1:
+-            input_info = 'input: [' + ','.join(input_names) + ']'
+-        elif len(input_names) == 1:
+-            input_info = "input: %s" % input_names[0]
+-        else:
+-            input_datas = None
+-            if type(self.model) == VModel:
+-                input_datas = self.model.Y # For VModel
+-            elif hasattr(self, "datas"):
+-                input_datas = self.datas # For Data Layer
+-
+-            if input_datas is not None:
+-                # For Data Layer
+-                if type(input_datas) == list:
+-                    input_info = "input: %s" % str([d.shape for d in input_datas])
+-                else:
+-                    input_info = "input: %s" % str(input_datas.shape)
+-            else:
+-                input_info = "input: None"
+-        return "<%s '%s' %s num_output: (%d)>" % (self.__class__.__name__, self.name, input_info, num_output)
+-    __repr__ = __str__
+-    def __del__(self):
+-        LayerManager.del_layer(self.name)
+-    def check_inputs(self, models, num_inputs):
+-        if type(models) != list:
+-            return
+-        assert len(models) == num_inputs, "the number of inputs of %s must be %d" % (self.__class__.__name__, num_inputs)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Eltwise.py`:
+-
+-```````py
+-from .Layer import *
+-
+-# Elementwise Operations
+-class Eltwise(Layer):
+-    SUM, PROD, MAX = range(3)
+-    def __init__(self, models, *args, **kwargs):
+-        # the type of models is list
+-        Layer.__init__(self, models, *args, **kwargs)
+-        if "coeffs" in kwargs:
+-            self.coeffs = np.array(kwargs["coeffs"])
+-            if self.coeffs.size != len(self.X):
+-                raise ValueError("The number of coeffs must be the number of inputs :-(")
+-        else:
+-            self.coeffs = np.ones(len(self.X))
+-        self.op = kwargs.get("op", Eltwise.SUM)
+-        if self.op < 0 or self.op > 3:
+-            raise RuntimeError("Eltwise operation Error: ", self.op)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X[0].shape)
+-    def forward(self):
+-        if self.op == Eltwise.SUM:
+-            self.Y = 0
+-            for i in range(len(self.X)):
+-                self.Y += self.X[i] * self.coeffs[i]
+-        elif self.op == Eltwise.PROD:
+-            for i in range(len(self.X)):
+-                x = self.X[i]
+-                x[x == 0] = 1e-100
+-            self.Y = np.prod(self.X, 0) * np.prod(self.coeffs)
+-        else:
+-            # self.op == Eltwise.MAX
+-            cy =  [self.X[i] * self.coeffs[i] for i in range(len(self.X))]
+-            self.argmax = np.argmax(cy, 0)
+-            self.Y = np.max(cy, 0)
+-    def backward(self):
+-        if self.op == Eltwise.SUM:
+-            for i in range(len(self.X)):
+-                if self.coeffs[i] == 1.0:
+-                    self.dX[i] = self.dY
+-                else:
+-                    self.dX[i] = self.coeffs[i] * self.dY
+-        elif self.op == Eltwise.PROD:
+-            for i in range(len(self.X)):
+-                self.dX[i] = self.Y / self.X[i] * self.dY
+-        else:
+-            # self.op == Eltwise.MAX
+-            for i in range(len(self.X)):
+-                self.dX[i] = np.zeros(self.X[0].shape)
+-                b = (self.argmax == i)
+-                self.dX[i][b] = self.coeffs[i] * self.dY[b]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/ConvT.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class ConvT(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.dim_out = kwargs["dim_out"]
+-        if "pad" in kwargs:
+-            self.pad_w = kwargs["pad"]
+-            self.pad_h = kwargs["pad"]
+-        else:
+-            self.pad_w = kwargs.get("pad_w", 0)
+-            self.pad_h = kwargs.get("pad_h", 0)
+-        if "kernel" in kwargs:
+-            self.kernel_w = kwargs["kernel"]
+-            self.kernel_h = kwargs["kernel"]
+-        else:
+-            self.kernel_w = kwargs["kernel_w"]
+-            self.kernel_h = kwargs["kernel_h"]
+-        self.stride = kwargs.get("stride", 1)
+-
+-        self.W = None
+-        self.b = None
+-    def reshape(self):
+-        N,D,NH,NW = self.X.shape
+-        self.NHW = NH * NW
+-        self.OH = (NH - 1) * self.stride + self.kernel_h - self.pad_h * 2 
+-        self.OW = (NW - 1) * self.stride + self.kernel_w - self.pad_w * 2 
+-        self.OHW = self.OH * self.OW
+-        self.Y = np.zeros((N, self.dim_out, self.OH, self.OW))
+-        if self.W is None:
+-            self.W = Xavier((D, self.dim_out, self.kernel_h * self.kernel_w))
+-            self.b = np.zeros((self.dim_out, ))
+-            self.PH = self.OH + self.pad_h * 2
+-            self.PW = self.OW + self.pad_w * 2
+-            self.I = im2col(np.arange(self.PH * self.PW).reshape((self.PH, self.PW)), (self.kernel_h, self.kernel_w), self.stride).ravel()
+-
+-        B = im2col(np.pad(np.arange(self.OH * self.OW).reshape((self.OH, self.OW)), ((self.pad_h, self.pad_h), (self.pad_w, self.pad_w)), "constant", constant_values = -1), (self.kernel_h, self.kernel_w), self.stride).ravel()
+-        bb = (B != -1)
+-        self.Bb = np.tile(bb, N*self.dim_out) # boolean
+-        tb = B[bb]
+-        #[0, HW, 2HW, 3HW...] * len(tb)
+-        self.Bi = np.repeat(np.arange(N * self.dim_out) * (self.OH*self.OW), len(tb)) + np.tile(tb, N * self.dim_out) 
+-
+-    def get_col(self, X):
+-        N,D,NH,NW = self.X.shape
+-        if self.pad_h != 0 or self.pad_w != 0:
+-            pad = np.pad(X, ((0,0),(0,0),(self.pad_h,self.pad_h),(self.pad_w,self.pad_w)), "constant")
+-            return pad.reshape((N,self.dim_out,self.PH * self.PW))[:,:,self.I].reshape((N,self.dim_out,self.kernel_h * self.kernel_w,self.NHW))
+-        return X.reshape((N,self.dim_out,self.PH * self.PW))[:,:,self.I].reshape((N,self.dim_out,self.kernel_h * self.kernel_w,self.NHW))
+-
+-    def forward(self):
+-        '''
+-        ConvT   Conv
+-        dim_out C
+-        D       dim_out(D)
+-        -----------------
+-        X: (N, D, NH, NW)
+-        W: (D, self.dim_out, kh * kw)
+-        Y_col: (N, self.dim_out, kh * kw, NH * NW)
+-        '''
+-        N,D,NH,NW = self.X.shape
+-        Y_col = np.tensordot(self.X.reshape((N, D, self.NHW)), self.W, axes = ([1], [0])).transpose((0,2,3,1))
+-        self.Y = npg.aggregate(self.Bi, Y_col.ravel()[self.Bb], size = self.Y.size).reshape(self.Y.shape) + self.b.reshape((1, self.dim_out, 1, 1))
+-    def backward(self):
+-        N,D,NH,NW = self.X.shape
+-        dY = self.dY.reshape((N,self.dim_out,self.OHW))
+-        self.db = np.sum(dY, (0, 2)).reshape(self.b.shape)
+-        dY_col = self.get_col(self.dY.reshape(self.Y.shape)) 
+-        X = self.X.reshape((N, D, self.NHW))
+-        self.dW = np.tensordot(X, dY_col, axes = ([0, 2], [0, 3]))
+-        self.dX = np.tensordot(dY_col, self.W, axes = ([1, 2], [1, 2])).swapaxes(1, 2).reshape(self.X.shape)
+-    @property
+-    def params(self):
+-        return [self.W, self.b]
+-    @property
+-    def grads(self):
+-        return [self.dW, self.db]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/SoftmaxWithLoss.py`:
+-
+-```````py
+-from .LossLayer import *
+-
+-class SoftmaxWithLoss(LossLayer):
+-    def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1) # N,C,H,W
+-    def reshape(self):
+-        self.Y = 0.0 
+-    def forward(self):
+-        e = np.exp(self.X - np.max(self.X, axis = self.axis, keepdims = True))
+-        s = np.sum(e, axis = self.axis, keepdims = True)
+-        self.softmax = e / s
+-        self.idx = get_idx_from_arg(self.softmax, self.label, self.axis)
+-        self.Y = -np.mean(np.log(self.softmax.ravel()[self.idx]))
+-    def backward(self):
+-        self.dX = self.softmax.copy()
+-        self.dX.ravel()[self.idx] -= 1.0
+-        self.dX *= self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Dropout.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Dropout(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.ratio = kwargs["ratio"]
+-        self.scale = 1.0 / (1.0 - self.ratio)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        if self.is_training():
+-            self.mask = (np.random.random(self.X.shape) > self.ratio)
+-            self.Y = np.multiply(self.X, self.mask) * self.scale
+-        else:
+-            self.Y = self.X
+-    def backward(self):
+-        if self.is_training():
+-            self.dX = np.multiply(self.dY, self.mask) * self.scale
+-        else:
+-            self.dX = self.dY
+-
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Conv.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Conv(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.dim_out = kwargs["dim_out"]
+-        if "pad" in kwargs:
+-            self.pad_w = kwargs["pad"]
+-            self.pad_h = kwargs["pad"]
+-        else:
+-            self.pad_w = kwargs.get("pad_w", 0)
+-            self.pad_h = kwargs.get("pad_h", 0)
+-        if "kernel" in kwargs:
+-            self.kernel_w = kwargs["kernel"]
+-            self.kernel_h = kwargs["kernel"]
+-        else:
+-            self.kernel_w = kwargs["kernel_w"]
+-            self.kernel_h = kwargs["kernel_h"]
+-        self.stride = kwargs.get("stride", 1)
+-
+-        self.W = None
+-        self.b = None
+-    def reshape(self):
+-        # (NCHW)
+-        N,C,H,W = self.X.shape
+-        self.NH = (H + self.pad_h * 2 - self.kernel_h) // self.stride + 1
+-        self.NW = (W + self.pad_w * 2 - self.kernel_w) // self.stride + 1
+-        self.Y = np.zeros((N, self.dim_out, self.NH, self.NW))
+-        # Convolution Core
+-        if self.W is None:
+-            self.NHW = self.NH * self.NW
+-            self.W = Xavier((self.dim_out, C, self.kernel_w * self.kernel_h))
+-            self.b = np.zeros((self.dim_out, ))
+-            self.PH = H + self.pad_h * 2
+-            self.PW = W + self.pad_w * 2
+-            # X_col index
+-            self.I = im2col(np.arange(self.PH * self.PW).reshape((self.PH, self.PW)), (self.kernel_h, self.kernel_w), self.stride).ravel()
+-
+-        B = im2col(np.pad(np.arange(H * W).reshape((H, W)), ((self.pad_h, self.pad_h), (self.pad_w, self.pad_w)), "constant", constant_values = -1), (self.kernel_h, self.kernel_w), self.stride).ravel()
+-        bb = (B != -1)
+-        self.Bb = np.tile(bb, N*C) # boolean
+-        tb = B[bb]
+-        #[0, HW, 2HW, 3HW...] * len(tb)
+-        self.Bi = np.repeat(np.arange(N * C) * (H*W), len(tb)) + np.tile(tb, N * C) 
+-
+-    def get_col(self, X):
+-        N,C,H,W = self.X.shape
+-        if self.pad_h != 0 or self.pad_w != 0:
+-            pad = np.pad(X, ((0,0),(0,0),(self.pad_h,self.pad_h),(self.pad_w,self.pad_w)), "constant")
+-            return pad.reshape((N,C,self.PH * self.PW))[:,:,self.I].reshape((N,C,self.kernel_h * self.kernel_w,self.NHW))
+-        return X.reshape((N,C,self.PH * self.PW))[:,:,self.I].reshape((N,C,self.kernel_h * self.kernel_w,self.NHW))
+-    def forward(self):
+-        self.X_col = self.get_col(self.X) # (N, C, kernel_h * kernel_w, NH * NW) 
+-        # tensordot result: (N, NHW, dim_out)
+-        # swapaxse(1, 2): (N, dim_out, NHW)
+-        self.Y = (np.tensordot(self.X_col, self.W, axes = ([1,2],[1,2])).swapaxes(1,2) + self.b.reshape((1, self.dim_out, 1))).reshape(self.Y.shape)
+-    def backward(self):
+-        N,C,H,W = self.X.shape
+-        dY = self.dY.reshape((N,self.dim_out,self.NHW))
+-        # Update dW
+-        # dY: (N,D,W')
+-        # X_col: (N,C,H',W')
+-        # dW: (N,D,C,H')
+-        # W: (D, C, H')
+-        self.dW = np.tensordot(dY, self.X_col, axes = ([0, 2],[0, 3]))
+-        # Update db
+-        self.db = np.sum(dY, (0, 2)).reshape(self.b.shape)
+-        # Update dX
+-        dX_col = np.tensordot(dY, self.W, axes = ([1],[0])).transpose((0, 2, 3, 1)) # (N, C, H', W')
+-        self.dX = npg.aggregate(self.Bi, dX_col.ravel()[self.Bb], size = self.X.size).reshape(self.X.shape)
+-    @property
+-    def params(self):
+-        return [self.W, self.b]
+-    @property
+-    def grads(self):
+-        return [self.dW, self.db]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Accuracy.py`:
+-
+-```````py
+-from .LossLayer import *
+-
+-class Accuracy(LossLayer):
+-    def __init__(self, model, *args, **kwargs):
+-        LossLayer.__init__(self, model, *args, **kwargs)
+-        self.top_k = kwargs.get("top_k", 1)
+-    def reshape(self):
+-        self.Y = 0.0
+-    def forward(self):
+-        w = np.argpartition(self.X, -self.top_k, axis = 1)[:, -self.top_k:]
+-        self.Y = np.mean((w == self.label).any(1))
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Pool.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Pool(Layer):
+-    MAX, AVG = range(2)
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        if "kernel" in kwargs:
+-            self.kernel_w = kwargs["kernel"]
+-            self.kernel_h = kwargs["kernel"]
+-        else:
+-            self.kernel_w = kwargs["kernel_w"]
+-            self.kernel_h = kwargs["kernel_h"]
+-        self.stride = kwargs.get("stride", 1)
+-        self.pool_id = Pool.MAX # MAX: 0, AVG: 1
+-        pool = kwargs["pool"]
+-        if type(pool) == str:
+-            pool = pool.lower()
+-            if pool == "avg" or pool == "mean":
+-                self.pool_id = Pool.AVG
+-            elif pool == "max":
+-                self.pool_id = Pool.MAX
+-        elif type(pool) == int:
+-            self.pool_id = pool 
+-        else:
+-            raise RuntimeError("Pool key Error: ", self.pool)
+-    def reshape(self):
+-        # (NCHW)
+-        N,C,H,W = self.X.shape
+-        self.NH = (H - self.kernel_h) // self.stride + 1
+-        self.NW = (W - self.kernel_w) // self.stride + 1
+-        self.Y = np.zeros((N, C, self.NH, self.NW))
+-        self.NHW = self.NH * self.NW
+-        self.I = im2col(np.arange(H * W).reshape((H, W)), (self.kernel_h, self.kernel_w), self.stride).ravel()
+-        self.KHW = self.kernel_h * self.kernel_w
+-        B = im2col(np.arange(H * W).reshape((H, W)), (self.kernel_h, self.kernel_w), self.stride).ravel()
+-        self.Bi = np.repeat(np.arange(N * C) * (H*W), len(B)) + np.tile(B, N * C) 
+-    def get_col(self, X):
+-        N,C,H,W = self.X.shape
+-        return X.reshape(N,C,H * W)[:,:,self.I].reshape((N,C,self.kernel_h * self.kernel_w,self.NHW))
+-    def forward(self):
+-        self.X_col = self.get_col(self.X) # (N, C, kernel_h * kernel_w, NH * NW) 
+-        # self.X_col -> (N, C, 1, NH * NW)
+-        if self.pool_id == Pool.AVG:
+-            self.Y = np.mean(self.X_col, 2).reshape(self.Y.shape)
+-        else:
+-            maxI = np.argmax(self.X_col, 2).ravel()
+-            self.idx = get_idx_from_arg(self.X_col, maxI, axis = 2) # index of (N, C, KHW, NHW) 
+-            self.Y = get_val_from_idx(self.X_col, self.idx).reshape(self.Y.shape)
+-    def backward(self):
+-        N,C,H,W = self.X.shape
+-        if self.pool_id == Pool.AVG:
+-            # AVG
+-            dX_col = np.tile(self.dY.reshape((N, C, 1, self.NHW)), (1, 1, self.KHW, 1)) / self.KHW 
+-            self.dX = npg.aggregate(self.Bi, dX_col.ravel(), size = self.X.size).reshape(self.X.shape) 
+-        else:
+-            # MAX
+-            self.dX = npg.aggregate(self.Bi.ravel()[self.idx], self.dY.ravel(), size = self.X.size).reshape(self.X.shape)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Sigmoid.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Sigmoid(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = np.clip(1.0 / (1.0 + np.exp(-self.X)), 1e-16, 1.0 - 1e-16)
+-    def backward(self):
+-        self.dX = np.multiply(self.dY, np.multiply(self.Y, 1.0 - self.Y))
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/MergeTest.py`:
+-
+-```````py
+-from .Layer import *
+-
+-# It's a test layer for multi input
+-# MergeTest([x0, x1])
+-
+-class MergeTest(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        # the type of models is list
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        siz = list(self.X[0].shape)
+-        siz[0] += self.X[1].shape[0]
+-        self.Y = np.zeros(siz)
+-    def forward(self):
+-        self.Y[0::2] = self.X[0]
+-        self.Y[1::2] = self.X[1]
+-    def backward(self):
+-        self.dX[0] = self.dY[0::2] 
+-        self.dX[1] = self.dY[1::2] 
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Softmax.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Softmax(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1) # N,C,H,W
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        e = np.exp(self.X - np.max(self.X, axis = self.axis, keepdims = True))
+-        s = np.sum(e, axis = self.axis, keepdims = True)
+-        self.Y = e / s
+-    def backward(self):
+-        shape = self.X.shape
+-        # (N, C, P)
+-        N = int(np.prod(shape[:self.axis]))
+-        C = int(shape[self.axis])
+-        P = int(np.prod(shape[self.axis+1:]))
+-
+-        '''
+-        dX = np.zeros((N, C, P))
+-        y = self.Y.reshape((N, C, P))
+-        dY = self.dY.reshape((N, C, P))
+-        for n in range(N):
+-            for p in range(P):
+-                # case: (n, p)
+-                for i in range(C):
+-                    for j in range(C):
+-                        if i == j:
+-                            dX[n, i, p] += (y[n, i, p] - y[n, i, p] ** 2) * dY[n, j, p]
+-                        else:
+-                            dX[n, i, p] += (-y[n, i, p] * y[n, j, p]) * dY[n, j, p]
+-        self.dX = dX.reshape(self.X.shape)
+-        '''
+-
+-        y1 = self.Y.reshape((N, C, 1, P))
+-        y2 = self.Y.reshape((N, 1, C, P))
+-
+-        s = (-y1) * y2
+-        # inds in (N, C, C, P)
+-        batch_inds = np.arange(0, (C*C*P)*N, C*C*P) # N
+-        # (n, 0, 0, k) -> (n, 1, 1, k) -> (n, 2, 2, k)
+-        diag_inds = np.arange(0, (P+C*P)*C, P+C*P) # C
+-        spatial_inds = np.arange(0, P) # P
+-        diag_inds = np.repeat(diag_inds, P)
+-        diag_inds += np.tile(spatial_inds, C)
+-        inds = np.repeat(batch_inds, C*P) + np.tile(diag_inds, N)
+-        # (N, C, C, P), self.Y: P->C->N
+-        s.ravel()[inds] += self.Y.ravel()
+-        # self.dY: (N, C, P)
+-        s *= self.dY.reshape(y2.shape)
+-        self.dX = s.sum(2).reshape(self.X.shape)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/Data.py`:
+-
+-```````py
+-from .Layer import *
+-
+-'''
+-[Notice]
+-If len(data) is not batch_size times, the batches are:
+-    Ex: data = [1,2,3,4,5,6,7,8,9,10], batch_size = 3
+-        batch_1: [1,2,3]
+-        batch_2: [4,5,6]
+-        batch_3: [7,8,9]
+-        batch_4: [2,3,4] # Notice!
+-        batch_5: [5,6,7]
+-        batch_6: [8,9,10]
+-
+-    It's designed for performance.
+-    If order is nessary, it's better to set batch_size the factor of len(data)
+-'''
+-
+-class Data(Layer):
+-    INPUT_TYPE_ERROR = "Data.datas must be a List with ndarrays or an ndarray"
+-    def __init__(self, datas = None, *args, **kwargs):
+-        # the type of datas is list with ndarrays or ndarray 
+-
+-        datas = self.base_init(datas, *args, **kwargs)
+-
+-        self.model = None
+-        self.__batch_size = None
+-        self.datas = datas
+-        self.batch_size = kwargs.get("batch_size")
+-    def reshape(self):
+-        if self.__batch_size is None:
+-            self.Y = self.__datas
+-
+-        if type(self.__datas) != list:
+-            self.Y = self.__datas[:self.__batch_size] 
+-        else:
+-            self.Y = [data[:self.__batch_size] for data in self.__datas]
+-
+-    def forward(self):
+-        if self.__batch_size is None:
+-            return
+-        e = self.__batch_i + self.__batch_size 
+-        if e > self.n:
+-            self.__batch_i = self.n - self.__batch_i
+-            e = self.__batch_i + self.__batch_size
+-
+-        if type(self.__datas) != list:
+-            self.Y = self.__datas[self.__batch_i:e]
+-        else:
+-            self.Y = [data[self.__batch_i:e] for data in self.__datas]
+-
+-        self.__batch_i = e
+-
+-    @property
+-    def batch_size(self):
+-        return self.__batch_size
+-    @batch_size.setter
+-    def batch_size(self, value):
+-        self.__batch_size = value
+-        self.__batch_i = 0
+-        if value is None:
+-            self.Y = self.__datas
+-        if self.__datas is not None:
+-            self.reshape()
+-    @property
+-    def datas(self):
+-        return self.__datas
+-    @datas.setter
+-    def datas(self, value):
+-        # Type Check
+-        if value is not None:
+-            if type(value) == list:
+-                for d in value:
+-                    assert type(d) == np.ndarray, TypeError(Data.INPUT_TYPE_ERROR) 
+-            else:
+-                assert type(value) == np.ndarray, TypeError(Data.INPUT_TYPE_ERROR)
+-
+-        self.__datas = value
+-        if value is None:
+-            return
+-
+-        self.__batch_i = 0
+-        if type(self.__datas) == list:
+-            self.n = len(self.__datas[0])
+-            self.set_output(len(self.__datas))
+-        else:
+-            self.n = len(self.__datas)
+-            self.set_output(1)
+-        self.reshape()
+-
+-    # Alias
+-    X = datas
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/layers/SELU.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class SELU(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.scale = kwargs.get("scale", 1.0507009873554804934193349852946)
+-        self.alpha = kwargs.get("alpha", 1.6732632423543772848170429916717)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        b = self.X > 0
+-        self.Y[b] = self.scale * self.X[b]
+-        self.sae = self.scale * self.alpha * np.exp(self.X[~b])
+-        self.Y[~b] = self.sae - self.scale * self.alpha 
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-        b = self.X > 0
+-        self.dX[b] = self.scale
+-        self.dX[~b] = self.sae
+-        self.dX = np.multiply(self.dX, self.dY)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/MatMul.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class MatMul(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        self.check_inputs(models, 2)
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.dot(self.X[0], self.X[1])
+-    def forward(self):
+-        self.Y = np.dot(self.X[0], self.X[1])
+-    def backward(self):
+-        self.dX = [np.dot(self.dY, self.X[1].T), np.dot(self.X[0].T, self.dY)]
+-
+-# Y = X @ constant
+-class MatMulConstantL(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-    def reshape(self):
+-        self.Y = np.dot(self.X, self.constant)
+-    def forward(self):
+-        self.Y = np.dot(self.X, self.constant)
+-    def backward(self):
+-        self.dX = np.dot(self.dY, self.constant.T)
+-
+-# Y = constant @ X
+-class MatMulConstantR(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-    def reshape(self):
+-        self.Y = np.dot(self.constant, self.X)
+-    def forward(self):
+-        self.Y = np.dot(self.constant, self.X)
+-    def backward(self):
+-        self.dX = np.dot(self.constant.T, self.dY)
+-
+-MatMul.OP_L = MatMulConstantL
+-MatMul.OP_R = MatMulConstantR
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Add.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Add(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X[0].shape)
+-    def forward(self):
+-        self.Y = np.sum(self.X, 0) 
+-    def backward(self):
+-        self.dX = [self.dY for _ in range(len(self.X))]
+-
+-class AddConstant(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.X + self.constant
+-    def backward(self):
+-        self.dX = self.dY 
+-
+-Add.OP_L = AddConstant
+-Add.OP_R = AddConstant
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Subtract.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Subtract(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        self.check_inputs(models, 2)
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X[0].shape)
+-    def forward(self):
+-        self.Y = self.X[0] - self.X[1] 
+-    def backward(self):
+-        self.dX = [self.dY, -self.dY]
+-
+-class SubtractConstantL(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.X - self.constant
+-    def backward(self):
+-        self.dX = self.dY 
+-
+-class SubtractConstantR(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.constant - self.X
+-    def backward(self):
+-        self.dX = -self.dY 
+-
+-Subtract.OP_L = SubtractConstantL
+-Subtract.OP_R = SubtractConstantR
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Positive.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Positive(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = self.X 
+-    def forward(self):
+-        self.Y = self.X 
+-    def backward(self):
+-        self.dX = self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Log.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Log(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = np.log(self.X)
+-    def backward(self):
+-        self.dX = self.dY * (1.0 / self.X) 
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Negative.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Negative(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = -self.X 
+-    def backward(self):
+-        self.dX = -self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Multiply.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Multiply(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        self.check_inputs(models, 2)
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X[0].shape)
+-    def forward(self):
+-        self.Y = np.multiply(self.X[0], self.X[1]) 
+-    def backward(self):
+-        self.dX = [np.multiply(self.dY, self.X[1]), np.multiply(self.dY, self.X[0])]
+-
+-class MultiplyConstant(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.X * self.constant
+-    def backward(self):
+-        self.dX = self.dY * self.constant 
+-
+-Multiply.OP_L = MultiplyConstant
+-Multiply.OP_R = MultiplyConstant
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/ReduceMin.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class ReduceMin(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1)
+-    def reshape(self):
+-        new_shp = [k for i,k in enumerate(self.X.shape) if i != self.axis]
+-        self.Y = np.zeros(new_shp)
+-    def forward(self):
+-        self.idx = get_idx_from_arg(self.X, np.argmin(self.X, self.axis), self.axis)
+-        self.Y = get_val_from_idx(self.X, self.idx).reshape(self.Y.shape)
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-        self.dX.ravel()[self.idx] = self.dY.ravel()
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Abs.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Abs(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = np.abs(self.X)
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape) 
+-        self.dX[self.X > 0] = 1.0 
+-        self.dX[self.X < 0] = -1.0
+-        self.dX *= self.dY
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/__init__.py`:
+-
+-```````py
+-from operator import add
+-from functools import reduce
+-
+-from ..layers import *
+-from .Add import *
+-from .Subtract import *
+-from .Multiply import *
+-from .Positive import *
+-from .Negative import *
+-from .MatMul import *
+-Dot = MatMul # alias of Mulmat
+-
+-from .Power import *
+-from .Exp import *
+-from .Log import *
+-from .Abs import *
+-from .ReduceMean import *
+-from .ReduceMax import *
+-from .ReduceMin import *
+-from .Compare import *
+-
+-def is_constant(x):
+-    return not isinstance(x, Layer) and not isinstance(x, YLayer)
+-
+-def get_op2(op, right = False):
+-    def get_layer(lhs, rhs):
+-        # Constant
+-        if right:
+-            return op.OP_R(lhs, constant = rhs)
+-        else:
+-            if is_constant(rhs):
+-                return op.OP_L(lhs, constant = rhs)
+-            elif is_constant(lhs):
+-                return op.OP_R(rhs, constant = lhs)
+-
+-        args = [lhs, rhs] # array
+-        l = op(args)
+-        return l
+-    return get_layer
+-
+-# operators
+-add = get_op2(Add)
+-subtract = get_op2(Subtract)
+-subtract_r = get_op2(Subtract, right = True)
+-multiply = get_op2(Multiply)
+-matmul = dot = get_op2(MatMul)
+-matmul_r = dot_r = get_op2(MatMul, right = True)
+-positive = lambda x : Positive(x) if is_constant(x) else x
+-negative = lambda x : Negative(x) 
+-reduce_mean = ReduceMean
+-reduce_max = ReduceMax
+-reduce_min = ReduceMin
+-equal = get_op2(Equal)
+-not_equal = get_op2(NotEqual)
+-greater_equal = get_op2(GreaterEqual)
+-greater = get_op2(Greater)
+-less_equal = get_op2(LessEqual)
+-less = get_op2(Less)
+-exp = lambda x : Exp(x)
+-log = lambda x : Log(x)
+-abs = lambda x : Abs(x)
+-
+-for l in [Layer, YLayer]:
+-    l.__add__ = add 
+-    l.__radd__ = add 
+-    l.__mul__ = multiply
+-    l.__rmul__ = multiply
+-    l.__pos__ = positive 
+-    l.__neg__ = negative 
+-    l.__sub__ = subtract 
+-    l.__rsub__ = subtract_r
+-    l.__ge__ = greater_equal
+-    l.__gt__ = greater
+-    l.__le__ = less_equal
+-    l.__lt__ = less
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/ReduceMean.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class ReduceMean(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1)
+-        if type(self.axis) == list:
+-            self.axis = tuple(set(self.axis))
+-        else:
+-            self.axis = (self.axis, )
+-    def reshape(self):
+-        self.reduce_s = [1] * self.X.ndim
+-        self.reduce_n = 1
+-        self.new_shp = list(self.X.shape)
+-        for i in self.axis:
+-            u = self.X.shape[i]
+-            self.reduce_s[i] = u 
+-            self.new_shp[i] = 1
+-            self.reduce_n *= u 
+-        y_shp = [s for i, s in enumerate(self.X.shape) if i not in self.axis]
+-        self.Y = np.zeros(y_shp)
+-    def forward(self):
+-        self.Y = np.mean(self.X, axis = self.axis)
+-    def backward(self):
+-        self.dX = np.tile(self.dY.reshape(self.new_shp) / self.reduce_n, self.reduce_s)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Layer.py`:
+-
+-```````py
+-from ..layers.Layer import *
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/ReduceMax.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class ReduceMax(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.axis = kwargs.get("axis", 1)
+-    def reshape(self):
+-        new_shp = [k for i,k in enumerate(self.X.shape) if i != self.axis]
+-        self.Y = np.zeros(new_shp)
+-    def forward(self):
+-        self.idx = get_idx_from_arg(self.X, np.argmax(self.X, self.axis), self.axis)
+-        self.Y = get_val_from_idx(self.X, self.idx).reshape(self.Y.shape)
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-        self.dX.ravel()[self.idx] = self.dY.ravel()
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Exp.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Exp(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        Layer.__init__(self, models, *args, **kwargs)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = np.exp(self.X)
+-    def backward(self):
+-        self.dX = self.dY * self.Y 
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Compare.py`:
+-
+-```````py
+-from .Layer import *
+-import operator
+-import functools
+-
+-class Compare(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        self.check_inputs(models, 2)
+-        Layer.__init__(self, models, *args, **kwargs)
+-        self.op = kwargs["op"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X[0].shape)
+-    def forward(self):
+-        self.Y = self.op(self.X[0], self.X[1]) 
+-    def backward(self):
+-        self.dX = [np.zeros(self.X[0].shape), np.zeros(self.X[1].shape)]
+-
+-class CompareConstantL(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-        self.op = kwargs["op"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.op(self.X, self.constant)
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-
+-class CompareConstantR(Layer):
+-    def __init__(self, model, *args, **kwargs):
+-        self.check_inputs(model, 1)
+-        Layer.__init__(self, model, *args, **kwargs)
+-        self.constant = kwargs["constant"]
+-        self.op = kwargs["op"]
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = self.op(self.constant, self.X)
+-    def backward(self):
+-        self.dX = np.zeros(self.X.shape)
+-
+-class CompareTemplate(object):
+-    def __init__(self, op):
+-        self.op = op
+-    def __call__(self, args):
+-        return Compare(args, op = self.op)
+-    @property
+-    def OP_L(self):
+-        return functools.partial(CompareConstantL, op = self.op)
+-    @property
+-    def OP_R(self):
+-        return functools.partial(CompareConstantR, op = self.op)
+-
+-def get_op(op):
+-    return CompareTemplate(op) 
+-
+-Equal = get_op(operator.eq)
+-NotEqual = get_op(operator.ne)
+-GreaterEqual = get_op(operator.ge)
+-Greater = get_op(operator.gt)
+-LessEqual = get_op(operator.le)
+-Less = get_op(operator.lt)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/operators/Power.py`:
+-
+-```````py
+-from .Layer import *
+-
+-class Power(Layer):
+-    def __init__(self, models, *args, **kwargs):
+-        Layer.__init__(self, models, *args, **kwargs)
+-        self.n = kwargs.get("n", 1)
+-    def reshape(self):
+-        self.Y = np.zeros(self.X.shape)
+-    def forward(self):
+-        self.Y = np.power(self.X, self.n)
+-    def backward(self):
+-        self.dX = self.dY * np.power(self.X, self.n - 1) * self.n 
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/Net.py`:
+-
+-```````py
+-#coding=utf-8
+-from .Defines import *
+-from .layers.utils.MultiInput import *
+-from .layers.utils.MultiOutput import *
+-from .layers.utils.Saver import *
+-from . import solvers
+-from . import wrapper
+-import functools
+-import signal
+-import weakref
+-
+-try:
+-    import queue
+-except:
+-    import Queue as queue
+-
+-class Net(object):
+-    def __init__(self):
+-        self.topo = []
+-        self.layers = dict()
+-        self.set_solver(solvers.SGD())
+-        self.phase = TRAIN
+-        # signal.signal(signal.SIGINT, self.signal_handler) 
+-    def set_loss(self, lossLayers):
+-        if type(lossLayers) != list:
+-            lossLayers = [lossLayers]
+-
+-        # Count
+-        q = queue.Queue()
+-        for l in lossLayers: 
+-            q.put(l)
+-        vis = set()
+-        cs = dict() # in degree
+-
+-        while not q.empty():
+-            l = q.get()
+-            if l in vis:
+-                continue
+-            vis.add(l)
+-            # if layer l has input
+-            # Data.model is None
+-            # l.model may be Layer or MultiInput
+-            if l.model is not None:
+-                for md in l.model.input_models():
+-                    cs[md] = cs.get(md, 0) + 1
+-                    q.put(md)
+-        # Find
+-        q = queue.Queue()
+-        for l in lossLayers: 
+-            q.put(l)
+-        st = []
+-        while not q.empty():
+-            l = q.get()
+-            st.append(l)
+-            if l.model is not None:
+-                for md in l.model.input_models():
+-                    cs[md] -= 1
+-                    if cs[md] == 0:
+-                        q.put(md)
+-        self.topo = st[::-1]
+-
+-        self.layers = dict()
+-        for l in self.topo:
+-            self.layers[l.name] = l
+-            l.forward_time = 0.0
+-            l.backward_time = 0.0
+-            self.forward_times = 0
+-            self.backward_times = 0
+-            # Avoid bidirection reference
+-            l.net = weakref.proxy(self)
+-
+-        self.reshape()
+-        for l in lossLayers: 
+-            l.dY = np.ones(l.Y.shape)
+-        self.init_solver()
+-
+-    def set_solver(self, solver):
+-        self.solver = solver
+-        self.init_solver()
+-    def reshape(self):
+-        for l in self.topo:
+-            l.reshape()
+-    def init_solver(self):
+-        if self.solver is not None:
+-            for l in self.topo:
+-                self.solver.init(l)
+-    def forward(self):
+-        self.forward_times += 1
+-        for l in self.topo:
+-            t = time.time()
+-            l.forward()
+-            l.forward_time += time.time() - t 
+-    def backward(self):
+-        self.backward_times += 1
+-
+-        self.solver.update_lr(self.backward_times)
+-
+-        for l in self.topo[::-1]:
+-            t = time.time()
+-            num_next_layers = len(l.next_layers)
+-            if num_next_layers > 0:
+-                if num_next_layers == 1:
+-                    l.dY = l.next_layers[0].dX
+-                else:
+-                    l.dY = np.zeros(l.Y.shape) 
+-                    for e in l.next_layers:
+-                        l.dY += e.dX
+-                l.dY = l.dY.reshape(l.Y.shape)
+-            # compute the gradient dX of layer l
+-            l.backward()
+-            # use the solver to update weights of layer l
+-            if l.lr > 0:
+-                self.solver.update(l)
+-
+-            l.backward_time += time.time() - t 
+-    def time(self):
+-        if self.forward_times == 0 or self.backward_times == 0:
+-            return
+-        print ("name\t|forward_time\t|backward_time\t|forward_mean\t|backward_mean\t|forward_times: %d, backward_times: %d" % (self.forward_times, self.backward_times))
+-        for l in self.topo:
+-            print ("%s\t|%f\t|%f\t|%f\t|%f" % (l.name, l.forward_time, l.backward_time, l.forward_time / self.forward_times, l.backward_time / self.backward_times))
+-
+-    def save(self, filename):
+-        # Save the learning parameters of network by name
+-        print ("Saving the parameters of the network to %s:" % filename)
+-        save_layers(filename, self.topo, info = True)
+-        print ("Saving Finished :-)")
+-
+-    def load(self, filename):
+-        # Load the learning parameters of network by name
+-        print ("Loading the parameters of the network from %s:" % filename)
+-        load_layers(filename, self.topo, info = True)
+-        print ("Loading Finished :-)")
+-
+-    def __getitem__(self, name):
+-        return wrapper.get_layer(name)
+-    @property
+-    def lr(self):
+-        return self.solver.lr
+-    @lr.setter
+-    def lr(self, value):
+-        self.solver.base_lr = value
+-    def signal_handler(self, signal, frame):
+-        # TODO: Exit to Save
+-        print ("Exit")
+-        pass
+-
+-# For compatibility
+-Net.setLoss = Net.set_loss
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/__init__.py`:
+-
+-```````py
+-from .Net import *
+-from .wrapper import *
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/solvers/Solver.py`:
+-
+-```````py
+-#coding=utf-8
+-import numpy as np
+-from .LRUpdater import *
+-
+-class Solver(object):
+-    def __init__(self, *args, **kwargs):
+-        self.iter_num = 0
+-        self.lr = 1.0
+-        self.lr_updater = LRUpdater(*args, **kwargs)
+-    def update(self, l):
+-        pass
+-    def init(self, l):
+-        # init each layer l
+-        pass
+-    @property
+-    def base_lr(self):
+-        return self.lr_updater.base_lr
+-    @base_lr.setter
+-    def base_lr(self, value):
+-        self.lr_updater.base_lr = value
+-    def update_lr(self, iter_num):
+-        self.lr = self.lr_updater.get_lr(iter_num)
+-    @property
+-    def lr_policy(self):
+-        return self.lr_updater.lr_policy
+-    @lr_policy.setter
+-    def lr_policy(self, value):
+-        self.lr_updater.set_policy(value)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/solvers/SGD.py`:
+-
+-```````py
+-from .Solver import *
+-
+-class SGD(Solver):
+-    def __init__(self, *args, **kwargs):
+-        Solver.__init__(self, *args, **kwargs)
+-    def update(self, l):
+-        params = l.params
+-        grads = l.grads
+-        mlr = self.lr * l.lr
+-        for i in range(len(grads)):
+-            params[i] -= grads[i] * mlr
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/solvers/__init__.py`:
+-
+-```````py
+-from .SGD import *
+-from .Momentum import *
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/solvers/LRUpdater.py`:
+-
+-```````py
+-#coding=utf-8
+-import numpy as np
+-
+-# TODO: MULTISTEP
+-LR_POLICY_NUM = 7
+-class LR_POLICY:
+-    FIXED, STEP, EXP, INV, MULTISTEP, POLY, SIGMOID = range(LR_POLICY_NUM)
+-
+-class LRUpdater:
+-    def __init__(self, *args, **kwargs):
+-        if "base_lr" in kwargs: 
+-            self.base_lr = kwargs["base_lr"] 
+-        else:
+-            self.base_lr = kwargs.get("lr", 1.0)
+-        self.gamma = kwargs.get("gamma", None)
+-        self.stepsize = kwargs.get("stepsize", None) 
+-        self.power = kwargs.get("power", None) 
+-        self.max_iter = kwargs.get("max_iter", None) 
+-        self.method = None
+-        self.lr_policy = kwargs.get("lr_policy", LR_POLICY.FIXED)
+-        self.set_policy(self.lr_policy)
+-    def set_policy(self, p):
+-        self.lr_policy = p
+-        self.method = LRUpdater.METHODS[p]
+-    def get_lr(self, iter_num):
+-        return self.method(self, iter_num)
+-    def fixed(self, iter_num):
+-        return self.base_lr
+-    def step(self, iter_num):
+-        # gamma, stepsize
+-        return self.base_lr * np.power(self.gamma, (iter_num // self.stepsize))
+-    def exp(self, iter_num):
+-        # gamma
+-        return self.base_lr * np.power(self.gamma, iter_num)
+-    def inv(self, iter_num):
+-        # gamma, power
+-        return self.base_lr * np.power(1.0 + self.gamma * iter_num, -self.power)
+-    def poly(self, iter_num):
+-        # power, max_iter
+-        return self.base_lr * np.power(1 - iter_num * 1.0 / self.max_iter, self.power)
+-    def sigmoid(self, iter_num):
+-        # gamma, stepsize
+-        return self.base_lr * (1.0 / (1.0 + np.exp(-self.gamma * (iter_num - self.stepsize))))
+-
+-LRUpdater.METHODS = [None] * LR_POLICY_NUM
+-LRUpdater.METHODS[LR_POLICY.FIXED] = LRUpdater.fixed
+-LRUpdater.METHODS[LR_POLICY.STEP] = LRUpdater.step
+-LRUpdater.METHODS[LR_POLICY.EXP] = LRUpdater.exp
+-LRUpdater.METHODS[LR_POLICY.INV] = LRUpdater.inv
+-LRUpdater.METHODS[LR_POLICY.POLY] = LRUpdater.poly
+-LRUpdater.METHODS[LR_POLICY.SIGMOID] = LRUpdater.sigmoid
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/solvers/Momentum.py`:
+-
+-```````py
+-from .Solver import *
+-
+-class Momentum(Solver):
+-    def __init__(self, *args, **kwargs):
+-        self.momentum = kwargs.get("momentum", 0.5)
+-        Solver.__init__(self, *args, **kwargs)
+-    def update(self, l):
+-        params = l.params
+-        grads = l.grads
+-        mlr = self.lr * l.lr
+-        for i in range(len(grads)):
+-            dx = self.momentum * l.mt[i] - mlr * grads[i]
+-            params[i] += dx 
+-            l.mt[i] = dx
+-    def init(self, l):
+-        l.mt = [0.0 for _ in range(len(l.params))]
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/Defines.py`:
+-
+-```````py
+-#coding=utf-8
+-import copy
+-import time
+-
+-TRAIN, TEST = range(2)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/mobula/testing.py`:
+-
+-```````py
+-import os
+-import sys
+-import numpy as np
+-from .layers import Layer
+-
+-if sys.version_info[0] < 3:
+-    FileNotFoundError = IOError
+-else:
+-    long = int
+-
+-
+-def to_numpy(data):
+-    if isinstance(data, np.ndarray):
+-        return data
+-    if hasattr(data, 'asnumpy'):
+-        return data.asnumpy()
+-    if hasattr(data, 'numpy'):
+-        return data.numpy()
+-    if isinstance(data, (list, tuple)):
+-        return np.array(data)
+-    raise TypeError('Unsupported Type: {}'.format(type(data)))
+-
+-
+-def to_tuple(data):
+-    if isinstance(data, tuple):
+-        return data
+-    if isinstance(data, list):
+-        return tuple(data)
+-    return (data, )
+-
+-
+-def assert_almost_equal(a, b, rtol=1e-5, atol=1e-8):
+-    def check_value(data, other):
+-        if isinstance(data, (int, long, float)):
+-            if hasattr(other, 'shape'):
+-                return np.full(other.shape, fill_value=data)
+-            else:
+-                return np.array(a)
+-        return data
+-    a = check_value(a, b)
+-    b = check_value(b, a)
+-    a = to_numpy(a)
+-    b = to_numpy(b)
+-    # Check Shape
+-    # If the shapes don't match, raise AssertionError and print the shapes
+-    assert a.shape == b.shape,\
+-        AssertionError('Unmatched Shape: {} vs {}'.format(a.shape, b.shape))
+-
+-    # Compute Absolute Error |a - b|
+-    error = a - b
+-    abs_error = np.abs(error)
+-    max_abs_error = abs_error.max()
+-
+-    def raise_error(abs_error, info):
+-        # tell where is maximum absolute error and the value
+-        loc = np.argmax(abs_error)
+-        idx = np.unravel_index(loc, abs_error.shape)
+-        out = ''
+-
+-        def get_array_R(data, name, idx, R):
+-            axes = [-1] if data.ndim == 1 else [-1, -2]
+-            shape = data.shape
+-            slice_list = list(idx)
+-            sidx = list(idx[-2:])
+-            for i in axes:
+-                axis_len = shape[i]
+-                axis_i = slice_list[i]
+-                start = max(0, axis_i - R + 1)
+-                stop = min(axis_len, axis_i + R)
+-                slice_list[i] = slice(start, stop)
+-                sidx[i] -= start
+-
+-            def str_slice_list(slice_list):
+-                return ', '.join([str(s) if not isinstance(s, slice) else
+-                                  '{}:{}'.format(s.start, s.stop) for s in slice_list])
+-            sdata = data.round(5)
+-            return '{name}[{slice_list}]:\n{data}\n'.format(name=name, slice_list=str_slice_list(slice_list),
+-                                                            data=sdata)
+-
+-        R = 5
+-        out += 'Location of maximum error: {}\n'.format(idx)
+-        out += '{}\n{}\n{}'.format(info,
+-                                   get_array_R(
+-                                       a, 'a', idx, R),
+-                                   get_array_R(
+-                                       b, 'b', idx, R),
+-                                   )
+-        raise AssertionError(out)
+-
+-    # Check Absolute Error
+-    if atol is not None:
+-        if max_abs_error > atol:
+-            # If absolute error >= atol, raise AssertionError,
+-            idx = abs_error.argmax()
+-            raise_error(abs_error, 'Maximum Absolute Error({}) > atol({}): {} vs {}'.
+-                        format(max_abs_error, atol, a.ravel()[idx], b.ravel()[idx]))
+-
+-    # Compute Relative Error |(a-b)/b|
+-    try:
+-        eps = np.finfo(b.dtype).eps
+-    except ValueError:
+-        eps = np.finfo(np.float32).eps
+-    relative_error = abs_error / (np.abs(b) + eps)
+-    max_relative_error = relative_error.max()
+-
+-    # Check Relative Error
+-    if max_relative_error > rtol:
+-        # If relative error >= rtol, raise AssertionError,
+-        idx = relative_error.argmax()
+-        raise_error(relative_error, 'Maximum Relative Error({}) > rtol({}): {} vs {}'.
+-                    format(max_relative_error, rtol, a.ravel()[idx], b.ravel()[idx]))
+-
+-
+-def assert_file_exists(fname):
+-    assert os.path.exists(fname), IOError("{} not found".format(fname))
+-
+-
+-def gradcheck(layer, inputs, eps=1e-6, rtol=1e-2, atol=None, sampling=None):
+-    assert isinstance(layer, Layer)
+-    if not isinstance(inputs, (tuple, list)):
+-        inputs = (inputs, )
+-    # To NumPy Tensor
+-    inputs = [to_numpy(x) for x in inputs]
+-    # Set Input
+-    layer.X = inputs if len(inputs) > 1 else inputs[0]
+-    layer.forward_all()
+-    ori_out = to_tuple(layer.Y)
+-    assert isinstance(ori_out, (tuple, list)), type(ori_out)
+-    dys = [np.random.normal(0, 0.01, size=out_i.shape) +
+-           0.1 for out_i in ori_out]
+-    assert len(dys) == len(ori_out), '{} vs {}'.format(len(dys), len(ori_out))
+-    layer.dY = dys if len(dys) > 1 else dys[0]
+-    layer.backward()
+-    grad = to_tuple(layer.dX)
+-    for i, x in enumerate(inputs):
+-        size = inputs[i].size
+-        sample_grad = np.empty_like(inputs[i])
+-        sample_grad_ravel = sample_grad.ravel()
+-        samples = np.arange(size)
+-        if sampling is not None:
+-            if isinstance(sampling, int):
+-                num_samples = sampling
+-            else:
+-                num_samples = int(sampling * size)
+-            samples = np.random.choice(samples, min(size, num_samples))
+-        for k in samples:
+-            x_ravel = x.ravel()
+-            old_elem_value = x_ravel[k]
+-            x_ravel[k] = old_elem_value + eps / 2
+-            layer.X = inputs if len(inputs) > 1 else inputs[0]
+-            layer.forward_all()
+-            pos_out = to_tuple(layer.Y)
+-            x_ravel[k] = old_elem_value - eps / 2
+-            layer.X = inputs if len(inputs) > 1 else inputs[0]
+-            layer.forward_all()
+-            neg_out = to_tuple(layer.Y)
+-            assert len(pos_out) == len(neg_out)
+-            assert len(pos_out) == len(ori_out)
+-            numerical_grad_k = np.sum(
+-                [dy * (pos - neg) / eps for pos, neg, dy in zip(pos_out, neg_out, dys)])
+-            sample_grad_ravel[k] = numerical_grad_k
+-        numerical_grad = grad[i].copy()
+-        numerical_grad.ravel()[samples] = sample_grad.ravel()[samples]
+-        assert_almost_equal(numerical_grad, grad[i], rtol=rtol, atol=atol)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/LICENSE`:
+-
+-```````
+-MIT License
+-
+-Copyright (c) 2017 wkcn <wkcn@live.cn>
+-
+-Permission is hereby granted, free of charge, to any person obtaining a copy
+-of this software and associated documentation files (the "Software"), to deal
+-in the Software without restriction, including without limitation the rights
+-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-copies of the Software, and to permit persons to whom the Software is
+-furnished to do so, subject to the following conditions:
+-
+-The above copyright notice and this permission notice shall be included in all
+-copies or substantial portions of the Software.
+-
+-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-SOFTWARE.
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_utils/test_saver.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.layers as L
+-import numpy as np
+-import os
+-
+-def clear_params(layer):
+-    rec = []
+-    for i in range(len(layer.params)):
+-        rec.append(layer.params[i])
+-        layer.params[i][...] = None
+-    return rec
+-
+-def init_params(layer):
+-    for i in range(len(layer.params)):
+-        layer.params[i][...] = np.random.random(layer.params[i].shape) 
+-
+-def test_net_saver():
+-    filename = "tmp.net"
+-
+-    X = np.random.random((4,2,1,1))
+-    Y = np.random.random((4, 10))
+-    x, y = L.Data([X, Y])
+-    x = L.FC(x, dim_out = 10) 
+-    with M.name_scope("mobula"): 
+-        x = L.PReLU(x)
+-    loss = L.MSE(x, label = y)
+-
+-    net = M.Net()
+-    net.set_loss(loss)
+-    net.lr = 0.01
+-
+-    for i in range(10):
+-        net.forward()
+-        net.backward()
+-
+-    net.save(filename)
+-    # random init layers
+-    lst = M.get_layers("/")
+-    assert len(lst) == 4 # Data, FC, PReLU, MSE 
+-
+-    k = 0
+-    rec = []
+-    for l in lst:
+-        for i in range(len(l.params)):
+-            rec.append(l.params[i])
+-            l.params[i][...] = None
+-            k += 1
+-    assert k == 3 # FC.W, FC.b, PReLU.a 
+-
+-    for l in lst:
+-        for i in range(len(l.params)):
+-            assert np.isnan(l.params[i]).all()
+-
+-    net.load(filename)
+-    h = 0
+-    for l in lst:
+-        for i in range(len(l.params)):
+-            assert np.allclose(rec[h], l.params[i])
+-            h += 1
+-    os.remove(filename)
+-
+-def test_saver():
+-    filename = "tmp.net"
+-
+-    X = np.random.random((4,2,1,1))
+-    Y = np.random.random((4, 10))
+-    x, y = L.Data([X, Y])
+-    fc = L.FC(x, dim_out = 10) 
+-    with M.name_scope("mobula"): 
+-        prelu = L.PReLU(fc)
+-    loss = L.MSE(prelu, label = y)
+-
+-    net = M.Net()
+-    net.set_loss(loss)
+-
+-    init_params(fc)
+-    init_params(prelu)
+-    # save mobula
+-    M.save_scope(filename, "mobula")
+-
+-    params_f = clear_params(fc)
+-    params_p = clear_params(prelu)
+-    for p in fc.params + prelu.params:
+-        assert np.isnan(p).all()
+-    M.load_scope(filename)
+-    for p in fc.params:
+-        assert np.isnan(p).all()
+-    for i, p in enumerate(prelu.params):
+-        assert np.allclose(p, params_p[i])
+-
+-    init_params(fc)
+-    init_params(prelu)
+-    # save all
+-    M.save_scope(filename)
+-
+-    params_f = clear_params(fc)
+-    params_p = clear_params(prelu)
+-
+-    for p in fc.params + prelu.params:
+-        assert np.isnan(p).all()
+-    M.load_scope(filename)
+-    for i, p in enumerate(fc.params):
+-        assert np.allclose(p, params_f[i])
+-    for i, p in enumerate(prelu.params):
+-        assert np.allclose(p, params_p[i])
+-    os.remove(filename)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_utils/test_utils.py`:
+-
+-```````py
+-from mobula.layers.utils.Defines import * 
+-import numpy as np
+-
+-def test_im2col():
+-    N, C, H, W = 3,4,5,6
+-    X = np.arange(N*C*H*W).reshape((N,C,H,W))
+-    def go_im2col(stride, KH, KW):
+-        NH = (H - KH) // stride + 1
+-        NW = (W - KW) // stride + 1
+-        Y = np.zeros((N, C, KH * KW, NH * NW))
+-        T = np.zeros((N, C, KH * KW, NH * NW))
+-        for i in range(N):
+-            for c in range(C):
+-                for ch in range(NH):
+-                    for cw in range(NW):
+-                        sh = ch * stride
+-                        sw = cw * stride
+-                        Y[i, c, :, ch * NW + cw] = X[i, c, sh:sh+KH, sw:sw+KW].ravel()
+-                T[i, c] = im2col(X[i,c], (KH, KW), stride)
+-        assert np.allclose(T, Y) 
+-
+-
+-    for stride in [1, 2, 3, 5]: 
+-        for KH in range(2, 5):
+-            for KW in range(2, 5):
+-                go_im2col(stride, KH, KW)
+-
+-def test_idx_arg():
+-    # X = np.random.random((3,4,5,6))
+-    X = np.random.random((1,2,3,4))
+-    for i in range(4):
+-        idx = np.argmax(X, axis = i)
+-        ma = np.max(X, axis = i)
+-        y = get_val_from_idx(X, get_idx_from_arg(X, idx, axis = i)).reshape(ma.shape)
+-        assert np.allclose(ma, y)
+-
+-def test_blocks():
+-    N,C,H,W = 3,4,9,9
+-    K = 3
+-    X = np.random.random((N,C,H,W))
+-    Y = np.random.random((N,C,H//K,W//K))
+-    for i in range(N):
+-        for c in range(C):
+-            for rr in range(H // K):
+-                for cc in range(W // K):
+-                    tr = rr * K
+-                    tc = cc * K
+-                    Y[i,c,rr,cc] = np.max(X[i,c,tr:tr+K,tc:tc+K])
+-    blocks = get_blocks(X, (K,K))
+-    assert np.allclose(np.max(blocks, (4,5)), Y)
+-
+-def test_ndarray_addr():
+-    a = np.arange(3)
+-    b = a
+-    c = a.copy()
+-    assert get_ndarray_addr(a) == get_ndarray_addr(b)
+-    assert get_ndarray_addr(a) != get_ndarray_addr(c)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_utils/test_layer_manager.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_layer_manager():
+-    X = np.arange(16).reshape((8, 2))
+-
+-    # Notice: The time of importing LayerManager is only Once when nosetests 
+-
+-    s = "/test_layer_manager/"
+-    with M.name_scope("test_layer_manager"):
+-        data0 = L.Data(X)
+-        data1 = L.Data(X)
+-        data2 = L.Data(X)
+-        assert data0.name == s + "Data"
+-        assert data1.name == s + "Data_1"
+-        assert data2.name == s + "Data_2"
+-
+-        relu0 = L.ReLU(data0)
+-        assert relu0.name == s + "ReLU"
+-        relu1 = L.ReLU(data1)
+-        assert relu1.name == s + "ReLU_1"
+-
+-        with M.name_scope("wkcn"):
+-            data3 = L.Data(X) # wkcn/Data
+-            data4 = L.Data(X) # wkcn/Data_1
+-            relu2 = L.ReLU(data0) # wkcn/ReLU 
+-            relu3 = L.ReLU(data0) # wkcn/ReLU_1
+-            with M.name_scope("mobula"):
+-                relu4 = L.ReLU(data0) # wkcn/mobula/ReLU
+-            relu5 = L.ReLU(data0) # wkcn/ReLU_2
+-
+-        data5 = L.Data(X) # Data_3
+-        relu6 = L.ReLU(data0) # ReLU_2
+-
+-        assert data3.name == s + "wkcn/Data"
+-        assert data4.name == s + "wkcn/Data_1"
+-        assert data5.name == s + "Data_3"
+-
+-        assert relu2.name == s + "wkcn/ReLU"
+-        assert relu3.name == s + "wkcn/ReLU_1"
+-        assert relu4.name == s + "wkcn/mobula/ReLU"
+-        assert relu5.name == s + "wkcn/ReLU_2"
+-        assert relu6.name == s + "ReLU_2"
+-
+-def test_layer_manager_in_function():
+-    s = "/test_layer_manager/"
+-    with M.name_scope("test_layer_manager"):
+-        X = np.arange(16).reshape((8, 2))
+-        data0 = L.Data(X)
+-
+-        def hello():
+-            data1 = L.Data(X)
+-            with M.name_scope("mobula"):
+-                data2 = L.Data(X)
+-            print ("in", data1.name)
+-            assert data1.name == s + "Data_1"
+-            assert data2.name == s + "mobula/Data"
+-
+-        hello()
+-        data3 = L.Data(X)
+-
+-        assert data0.name == s + "Data"
+-        assert data3.name == s + "Data_1"
+-
+-def test_get_layer():
+-    X = np.arange(16).reshape((8, 2))
+-    data0 = L.Data(X)
+-    data0_ref = M.get_layer(data0.name)
+-    assert data0_ref is data0
+-    data0_ref = M.get_layer("/Data")
+-    assert data0_ref is data0
+-    data0_ref = M.get_layer("Data")
+-    assert data0_ref is data0
+-
+-def test_name():
+-    L.Add([L.ReLU(None), L.ReLU(None)])
+-    L.ReLU(L.ReLU(None))
+-    print (L.Add(None).name, L.ReLU(None).name)
+-    assert L.Add(None).name == "/Add"
+-    assert L.ReLU(None).name == "/ReLU"
+-    w = L.ReLU(L.ReLU(None)) # the first ReLU op is ReLU, and the second ReLU op is ReLU_1.
+-    assert L.ReLU(None).name == "/ReLU_2"
+-    del w
+-    assert L.ReLU(None).name == "/ReLU"
+-    net = M.Net()
+-    X = np.arange(16).reshape((2,2,2,2))
+-    print (L.Data().name)
+-    d1 = L.Data(X)
+-    d2 = L.Data(X)
+-    net.set_loss(d1 + d2)
+-    del d1, d2, net
+-    print (L.Data().name, L.Add(None).name)
+-    assert L.Data().name == "/Data"
+-    assert L.Add(None).name == "/Add"
+-
+-def test_scope_name():
+-    assert M.get_scope_name() == "/"
+-    with M.name_scope("a"): 
+-        assert M.get_scope_name() == "/a/"
+-        with M.name_scope("b"): 
+-            assert M.get_scope_name() == "/a/b/"
+-            with M.name_scope("c"): 
+-                assert M.get_scope_name() == "/a/b/c/"
+-            assert M.get_scope_name() == "/a/b/"
+-        assert M.get_scope_name() == "/a/"
+-    assert M.get_scope_name() == "/"
+-
+-def test_get_layers():
+-    x = np.ones((1,2,1,2))
+-    data0 = L.Data(x)
+-    relu0 = L.ReLU(x)
+-    with M.name_scope("mobula"):
+-        data1 = L.Data(x)
+-    scope = M.get_scope()
+-    root_layers = scope.get_layers()
+-    assert data0 in root_layers
+-    assert relu0 in root_layers
+-    assert data1 in root_layers
+-    assert len(root_layers) == 3
+-    mobula_layers = M.get_scope("mobula").get_layers()
+-    assert data0 not in mobula_layers
+-    assert relu0 not in mobula_layers
+-    assert data1 in mobula_layers
+-    assert len(mobula_layers) == 1
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_fc.py`:
+-
+-```````py
+-import mobula
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_fc():
+-    X = np.zeros((4,2,1,1))
+-    X[0,:,0,0] = [0.,0.]
+-    X[1,:,0,0] = [0.,1.]
+-    X[2,:,0,0] = [1.,0.]
+-    X[3,:,0,0] = [1.,1.]
+-
+-    Y = np.array([8.,10.,12.,14.]).reshape((-1, 1))
+-
+-    data, label = L.Data([X, Y])
+-    fc1 = L.FC(data, "fc1", dim_out = 1)
+-    loss = L.MSE(fc1, "MSE", label = label)
+-
+-    fc1.reshape()
+-
+-    fc1.W = np.array([1.0, 3.0]).reshape(fc1.W.shape)
+-    fc1.b = np.array([0.0]).reshape(fc1.b.shape)
+-
+-
+-    net = mobula.Net()
+-    net.set_loss(loss)
+-
+-    net.lr = 0.5
+-    for i in range(30):
+-        net.forward()
+-        net.backward()
+-        print ("Iter: %d, Cost: %f" % (i, loss.Y))
+-
+-    # forward one more time, because of the change of weights last backward
+-    net.forward()
+-    target = np.dot(X.reshape((4, 2)), fc1.W.T) + fc1.b.T
+-    assert np.allclose(fc1.Y, target)
+-
+-def test_fc2():
+-    X = np.random.random((4,2,1,1))
+-    Y1 = np.random.random((4,10))
+-    Y2 = np.random.random((4,10))
+-
+-    [x,y1,y2] = L.Data([X,Y1,Y2])
+-    fc1 = L.FC(x, dim_out = 10)
+-    fc2 = L.FC(x, dim_out = 10)
+-    loss1 = L.MSE(fc1, label = Y1)
+-    loss2 = L.MSE(fc2, label = Y2)
+-
+-    net = mobula.Net()
+-    loss = L.L1Loss(loss1 + loss2)
+-    net.set_loss(loss)
+-    L1Loss = mobula.get_layer("L1Loss")
+-    Add = mobula.get_layer(L1Loss.model.name)
+-
+-    net.lr = 0.5
+-    for i in range(30):
+-        net.forward()
+-        net.backward()
+-        print ("Iter: %d, Cost: %f" % (i, loss.Y))
+-    # check forward
+-    t1 = np.dot(X.reshape((4,2)), fc1.W.T) + fc1.b.T
+-    t2 = np.dot(X.reshape((4,2)), fc2.W.T) + fc2.b.T
+-    # forward one more time, because of the change of weights last backward
+-    net.forward()
+-    assert np.allclose(fc1.Y, t1)
+-    assert np.allclose(fc2.Y, t2)
+-
+-def test_fc3():
+-    X = np.random.random((2,3,4,5))
+-    fc = L.FC(X, dim_out = 10)
+-    fc.reshape()
+-    fc.forward()
+-    fc.dY = np.random.random(fc.Y.shape)
+-    fc.backward()
+-    Y = np.dot(X.reshape((2,-1)), fc.W.T) + fc.b.T
+-    dX = np.dot(fc.dY, fc.W)
+-    db = np.sum(fc.dY, 0).reshape(fc.b.shape)
+-    dW = np.dot(fc.dY.T, X.reshape((2,-1))).reshape(fc.W.shape)
+-    assert np.allclose(fc.Y, Y)
+-    assert np.allclose(fc.dX, dX)
+-    assert np.allclose(fc.db, db)
+-    assert np.allclose(fc.dW, dW)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_net.py`:
+-
+-```````py
+-import mobula
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_net():
+-    X = np.random.random((4,2,1,1))
+-    Y1 = np.random.random((4,5))
+-    Y2 = np.random.random((4,5))
+-
+-    [x,y1,y2] = L.Data([X,Y1,Y2])
+-    fc0 = L.FC(x, dim_out = 10)
+-    fc1 = L.FC(fc0, dim_out = 5)
+-    fc2 = L.FC(fc0, dim_out = 5)
+-
+-    loss1 = L.MSE(fc1, label = y1)
+-    loss2 = L.MSE(fc2, label = y2)
+-
+-    net = mobula.Net()
+-    net.set_loss(loss1 + loss2)
+-
+-    net.lr = 0.01
+-    for i in range(10):
+-        net.forward()
+-        net.backward()
+-        net.time()
+-        print ("Iter: %d, Cost: %f" % (i, loss1.Y + loss2.Y))
+-
+-    assert np.allclose(fc0.dY, fc1.dX + fc2.dX)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_convt.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def go_convt(stride, pad):
+-    print ("test ConvT: ", stride, pad)
+-    X = np.random.random((2, 4, 4, 4)) * 100
+-    N, D, NH, NW = X.shape
+-    K = 3
+-    C = 1
+-    FW = np.random.random((D, C, K * K)) * 10
+-    F = FW.reshape((D, C, K, K))
+-
+-    data = L.Data(X)
+-    convT = L.ConvT(data, kernel = K, pad = pad, stride = stride, dim_out = C)
+-
+-    pad_h = pad_w = pad
+-    kernel_h = kernel_w = K
+-
+-    OH = (NH - 1) * stride + kernel_h - pad_h * 2 
+-    OW = (NW - 1) * stride + kernel_w - pad_w * 2 
+-
+-    data.reshape()
+-    convT.reshape()
+-
+-    convT.W = FW
+-    convT.b = np.random.random(convT.b.shape) * 10
+-
+-    # Conv:  (OH, OW) -> (NH, NW)
+-    # ConvT: (NH. NW) -> (OH, OW)
+-    influence = [[[None for _ in range(kernel_h * kernel_w)] for _ in range(OW)] for _ in range(OH)]
+-    for h in range(NH):
+-        for w in range(NW):
+-            for fh in range(kernel_h):
+-                for fw in range(kernel_w):
+-                    ph = h * stride + fh
+-                    pw = w * stride + fw
+-                    oh = ph - pad_h
+-                    ow = pw - pad_w
+-                    if oh >= 0 and ow >= 0 and oh < OH and ow < OW:
+-                        influence[oh][ow][fh * kernel_w + fw] = (h, w)
+-
+-    ty = np.zeros((N, C, OH, OW))
+-    dW = np.zeros(convT.W.shape)
+-    dX = np.zeros(convT.X.shape)
+-    dY = np.random.random(convT.Y.shape) * 100
+-    # F = FW.reshape((D, C, K, K))
+-    # N, D, NH, NW = X.shape
+-    for i in range(N):
+-        for c in range(C):
+-            for oh in range(OH):
+-                for ow in range(OW):
+-                    il = influence[oh][ow]
+-                    for t, pos in enumerate(il):
+-                        if pos is not None:
+-                            h,w = pos
+-                            for d in range(D):
+-                                ty[i, c, oh, ow] += X[i, d, h, w] * FW[d, c].ravel()[t]
+-                                dW[d, c].ravel()[t] += dY[i, c, oh, ow] * X[i, d, h, w]
+-                                dX[i, d, h, w] += dY[i, c, oh, ow] * FW[d, c].ravel()[t]
+-
+-    ty += convT.b.reshape((1, -1, 1, 1))
+-
+-    db = np.sum(dY, (0, 2, 3)).reshape(convT.b.shape)
+-
+-    convT.forward()
+-    assert np.allclose(convT.Y, ty)
+-
+-    # test backward
+-    # db, dw, dx
+-    convT.dY = dY
+-    convT.backward()
+-
+-    assert np.allclose(convT.db, db)
+-    assert np.allclose(convT.dW, dW)
+-    assert np.allclose(convT.dX, dX)
+-
+-
+-def test_conv():
+-    go_convt(1, 0)
+-    go_convt(2, 0)
+-    go_convt(3, 0)
+-    go_convt(1, 1)
+-    go_convt(2, 1)
+-    go_convt(3, 1)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_mse.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_mse():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W)) - 0.5
+-    b = np.random.random((N, C, H, W)) - 0.5
+-
+-    l = L.MSE(a, label = b)
+-    y = l.eval()
+-    d = a - b
+-    assert np.allclose(np.mean(np.square(d)), l.Y)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, 2 * d * l.dY)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_activation.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_sigmoid():
+-    X = ((np.arange(10000) - 5000) / 1000.0).reshape((-1, 1, 1, 1))
+-    data = L.Data(X, "data")
+-    data.reshape()
+-    l = L.Sigmoid(data)
+-    l.reshape()
+-    assert l.Y.shape == X.shape
+-    l.forward()
+-    l.dY = np.random.random(l.Y.shape) * 10
+-    l.backward()
+-
+-    enx = np.exp(-X)
+-    assert np.allclose(l.Y.ravel(), (1.0 / (1.0 + enx)).ravel())
+-    assert np.allclose(l.dX.ravel(), (enx / np.square(1 + enx) * l.dY).ravel())
+-
+-def test_relu():
+-    X = ((np.arange(10000) - 5000) / 1000.0).reshape((-1, 1, 1, 1))
+-    data = L.Data(X, "data")
+-    data.reshape()
+-    l = L.ReLU(data)
+-    l.reshape()
+-    assert l.Y.shape == X.shape
+-    l.forward()
+-    l.dY = np.random.random(l.Y.shape) * 10
+-    l.backward()
+-    Y = np.zeros(X.shape)
+-    b = (X > 0)
+-    Y[b] = X[b]
+-    dX = np.zeros(X.shape)
+-    dX[b] = l.dY[b]
+-    '''
+-    d = (l.dX != dX)
+-    print (l.dX[d], dX[d])
+-    '''
+-    assert np.allclose(l.Y.ravel(), Y.ravel())
+-    assert np.allclose(l.dX.ravel(), dX.ravel())
+-
+-def test_selu():
+-    X = ((np.arange(10000) - 5000) / 1000.0).reshape((-1, 1, 1, 1))
+-    data = L.Data(X, "data")
+-    data.reshape()
+-    l = L.SELU(data)
+-    y = l.eval()
+-    ty = np.zeros(X.shape) 
+-    ty[X > 0] = l.scale * X[X>0]
+-    ty[X<=0] = l.scale * (l.alpha * np.exp(X[X<=0]) - l.alpha)
+-    assert np.allclose(y, ty)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    dX = np.zeros(X.shape)
+-    dX[X > 0] = l.scale
+-    dX[X <= 0] = l.scale * l.alpha * np.exp(X[X<=0])
+-    dX *= l.dY
+-    assert np.allclose(dX, l.dX)
+-
+-def test_PReLU():
+-    X = ((np.arange(10000) - 5000) / 1000.0).reshape((-1, 1, 1, 1))
+-    data = L.Data(X, "data")
+-    data.reshape()
+-    l = L.PReLU(data)
+-    y = l.eval()
+-    ty = np.zeros(X.shape)
+-    ty[X>0] = X[X>0]
+-    ty[X<=0] = l.alpha * X[X<=0]
+-    assert np.allclose(y, ty)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    dX = np.zeros(X.shape)
+-    dX[X>0] = 1
+-    dX[X<=0] = l.alpha
+-    dX *= l.dY
+-    print (dX, l.dX)
+-    assert np.allclose(dX, l.dX)
+-
+-def test_tanh():
+-    X = ((np.arange(10000) - 5000) / 1000.0).reshape((-1, 1, 1, 1))
+-    data = L.Data(X, "data")
+-    data.reshape()
+-    l = L.Tanh(data)
+-    y = l.eval()
+-    p = np.exp(X)
+-    n = np.exp(-X)
+-    ty = (p - n) / (p + n)
+-    assert np.allclose(y, ty)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    dX = 1.0 - np.square(p - n) / np.square(p + n)
+-    dX *= l.dY
+-    assert np.allclose(dX, l.dX)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_reshape.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_reshape():
+-    X = np.arange(2 * 3 * 4 * 5).reshape((2, 3, 4, 5))
+-    dY = np.arange(100, 100 + 2 * 3 * 4 * 5).reshape((2, 3, 4, 5))
+-    l = L.Reshape(None, "reshape", dims = [2, -1, 3, 0])
+-    l.X = X
+-    l.reshape()
+-    l.forward()
+-    l.dY = dY
+-    l.backward()
+-
+-    target = X.reshape((2, 4, 3, 5))
+-    assert l.Y.shape == target.shape
+-    assert (l.Y == target).all
+-
+-    tdX = dY.reshape(X.shape)
+-    assert l.dX.shape == tdX.shape
+-    assert (l.dX == tdX).all
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_contrastive.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_contrastive():
+-    A = np.array([[1,2,0], [2,1,0]]).astype(np.float)
+-    B = np.array([[0,1,3], [2,3,1]]).astype(np.float)
+-
+-    diff = A - B # 2 x 3
+-    dist_sq = np.sum(np.square(diff), 1).reshape((2,1)) # 2 x 1
+-    dist = np.sqrt(dist_sq) # 2 x 1
+-
+-    print ("diff", diff)
+-
+-    for i in range(2):
+-        for j in range(2):
+-            sim = np.array([i, j]).reshape((2, 1))
+-
+-
+-            data = L.Data([A,B,sim])
+-            [a,b,s] = data()
+-
+-            l = L.ContrastiveLoss([a,b,s], margin = 6.0)
+-
+-            print ("sim", s.Y.ravel())
+-            l.forward()
+-            l.backward()
+-
+-            # margin - d
+-            md = l.margin - dist
+-            # max(md, 0)
+-            ma = np.clip(md, 0, np.inf)
+-
+-            same = (s.Y == 1)
+-
+-            print ("sha", dist_sq.shape, same.shape)
+-            sa = dist_sq * same
+-            sb = np.square(ma) * (1 - same)
+-            print ("lr", sa, sb)
+-            target = np.sum(sa + sb) / 2.0 / 2
+-            print ("t", target, l.Y, target - l.Y)
+-            assert np.allclose(target, l.Y)
+-
+-            left = diff / 2.0
+-            right = -ma / 2.0 * diff / dist
+-            w = left * same + right * (1.0 - same)
+-            print ("dx", l.dX[0], w, l.dX[0] - w)
+-            assert np.allclose(l.dX[0], w)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_batchnorm.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_batchnorm_mean_var():
+-    momentum = 0.9
+-    eps = 1e-5
+-    use_global_stats = False
+-    N, C = 12, 10
+-
+-    X = np.random.random((N, C)) * 100
+-    var = np.var(X, 0)
+-    mean = np.mean(X, 0)
+-    data = L.Data(X, batch_size = 4)
+-    bn = L.BatchNorm(data, momentum = momentum, eps = eps, use_global_stats = use_global_stats)
+-
+-    data.reshape()
+-    bn.reshape()
+-    bn.dY = np.ones(bn.Y.shape)
+-    moving_mean = np.zeros((1, C))
+-    moving_var = np.ones((1, C))
+-    for i in range(3 * 3):
+-        data.forward()
+-        moving_mean = momentum * moving_mean + (1 - momentum) * np.mean(data.Y, 0)
+-        moving_var = momentum * moving_var + (1 - momentum) * np.var(data.Y, 0)
+-        bn.forward()
+-        bn.backward()
+-
+-    assert np.allclose(moving_mean, bn.moving_mean)
+-    assert np.allclose(moving_var, bn.moving_var)
+-
+-    bn.use_global_stats = True
+-
+-    for i in range(3 * 3):
+-        data.forward()
+-        bn.forward()
+-        bn.backward()
+-
+-    assert np.allclose(moving_mean, bn.moving_mean)
+-    assert np.allclose(moving_var, bn.moving_var)
+-
+-def test_grads():
+-    momentum = 0.9
+-    eps = 1e-5
+-    use_global_stats = False
+-    X = np.arange(24).reshape((4, 6)).astype(np.float)
+-    bn = L.BatchNorm(None, momentum = momentum, eps = eps, use_global_stats = use_global_stats)
+-    bn.X = X
+-    bn.reshape()
+-    bn.dY = np.ones(bn.Y.shape)
+-    bn.W = np.random.random(bn.W.shape) * 10
+-    bn.b = np.random.random(bn.b.shape) * 10
+-    bn.forward()
+-    bn.backward()
+-
+-    var = np.var(X, 0)
+-    mean = np.mean(X, 0)
+-
+-    assert np.allclose(bn.moving_mean, mean * (1 - momentum))
+-    assert np.allclose(bn.moving_var, var * (1 - momentum) + momentum)
+-
+-    bn.use_global_stats = True
+-    bn.moving_var = var = np.random.random(var.shape)
+-    bn.moving_mean = mean = np.random.random(mean.shape)
+-    bn.forward()
+-    bn.backward()
+-
+-    dnx = bn.dY * bn.W
+-    dvar = np.sum(dnx * (X - mean), 0) * (-0.5) * np.power((var + bn.eps), -1.5)
+-    dmean = np.sum(dnx * (-1) / np.sqrt(var + bn.eps), 0) + dvar * np.mean(-2 * (X - mean), 0)
+-
+-    dX = dnx * 1.0 / np.sqrt(var + bn.eps) + dvar * 2.0 * (X - mean) / X.shape[0] + dmean / X.shape[0]
+-    nx = (X - mean) / np.sqrt(var + bn.eps)
+-    dW = np.sum(bn.dY * nx, 0, keepdims = True)
+-    db = np.sum(bn.dY, 0, keepdims = True)
+-
+-    print ("dX", bn.dX, dX)
+-    assert np.allclose(bn.dX, dX)
+-    print ("dW", bn.dW, dW)
+-    assert np.allclose(bn.dW, dW)
+-    print ("db", bn.db, db)
+-    assert np.allclose(bn.db, db)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_eltwise.py`:
+-
+-```````py
+-import mobula
+-import mobula.layers as L
+-import numpy as np
+-
+-def go_eltwise(op):
+-    a = np.array([1,0,6]).astype(np.float)
+-    b = np.array([4,5,3]).astype(np.float)
+-    print ("a: ", a)
+-    print ("b: ", b)
+-    data1 = L.Data(a)
+-    data2 = L.Data(b)
+-    coeffs = np.array([-1.0,1.2])
+-    l = L.Eltwise([data1,data2], op = op, coeffs = coeffs)
+-    l.reshape()
+-    l.forward()
+-    print ("Y: ", l.Y)
+-    dY = np.array([7, 8, 9]).astype(np.float)
+-    l.dY = dY 
+-    print ("dY: ", l.dY)
+-    l.backward()
+-    print ("dX: ", l.dX[0], l.dX[1])
+-    c0, c1 = coeffs
+-    if op == L.Eltwise.SUM:
+-        Y = c0 * a + c1 * b
+-        dX0 = c0 * dY 
+-        dX1 = c1 * dY 
+-    elif op == L.Eltwise.PROD:
+-        Y = a * b * c0 * c1
+-        dX0 = b * dY * c0 * c1 
+-        dX1 = a * dY * c0 * c1 
+-    elif op == L.Eltwise.MAX:
+-        Y = np.max([c0*a,c1*b], 0)
+-        i = np.argmax([c0*a,c1*b], 0)
+-        dX0 = np.zeros(a.shape)
+-        dX1 = np.zeros(b.shape)
+-        dX0[i == 0] = dY[i == 0] * c0
+-        dX1[i == 1] = dY[i == 1] * c1
+-
+-    print ("Y", l.Y, Y)
+-    assert np.allclose(l.Y, Y)
+-    assert np.allclose(l.dX[0], dX0)
+-    assert np.allclose(l.dX[1], dX1)
+-
+-def test_eltwise():
+-    print ("TEST SUM")
+-    go_eltwise(L.Eltwise.SUM)
+-
+-    print ("TEST PROD")
+-    go_eltwise(L.Eltwise.PROD)
+-
+-    print ("TEST MAX")
+-    go_eltwise(L.Eltwise.MAX)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_crop.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_crop():
+-    X1 = np.arange(4 * 5 * 6 * 6).reshape((4,5,6,6))
+-    for offset in range(2): 
+-        for axis in range(4):
+-            to_shp = list(X1.shape)
+-            w = [slice(None)] * 4
+-            for i in range(axis, 4):
+-                to_shp[i] -= 2
+-                w[i] = slice(offset, to_shp[i] + offset)
+-
+-            X2 = np.zeros(to_shp)
+-            [x1, x2] = L.Data([X1, X2])
+-            l = L.Crop([x1, x2], offset = offset, axis = axis)
+-            l.reshape()
+-            l.forward()
+-            assert np.allclose(l.Y, X1[tuple(w)])
+-            l.dY = np.random.random(l.Y.shape)
+-            l.backward()
+-            tmp = np.zeros(X1.shape)
+-            tmp[tuple(w)] = l.dY
+-            assert np.allclose(l.dX, tmp)
+-
+-def test_crop2():
+-    X1 = np.arange(3 * 4 * 5 * 5).reshape((3,4,5,5))
+-    X2 = np.zeros((2,2,2,2))
+-    [x1, x2] = L.Data([X1, X2])
+-    l = L.Crop([x1, x2], offset = (1,2,1), axis = 1)
+-    assert np.allclose(l.eval(), X1[:, 1:3, 2:4, 1:3])
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    dX = np.zeros(X1.shape) 
+-    dX[:,1:3,2:4,1:3] = l.dY
+-    assert np.allclose(l.dX, dX)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_acc.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_acc():
+-    X = np.array([[0, 1, 2],
+-                    [1, 2, 0],
+-                    [0, 1, 2],
+-                    [1, 2, 0]])
+-
+-    Y = np.array([1, 0, 2, 1]).reshape((-1, 1)) 
+-    # top-k
+-    # 1            [False, False, True, True]
+-    # 2            [True, True, True, True]
+-
+-    target = [np.array([False, False, True, True]), np.array([True, True, True, True])]
+-
+-    [data, label] = L.Data([X, Y])
+-    for i in range(2):
+-        l = L.Accuracy(data, label = label, top_k = 1 + i)
+-        l.reshape()
+-        l.forward()
+-        assert l.Y == np.mean(target[i])
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_concat.py`:
+-
+-```````py
+-import mobula
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_concat():
+-    def go_concat(axis):
+-        a = np.random.random((2,3,4,5))
+-        b = np.random.random((2,3,4,5))
+-        c = np.random.random((2,3,4,5))
+-        l = L.Concat([a,b,c], axis = axis)
+-        l.reshape()
+-        y = l.eval()
+-        l.dY = np.random.random(l.Y.shape)
+-        l.backward()
+-        assert np.allclose(y, np.concatenate([a,b,c], axis))
+-        dd = a.shape[axis]
+-        sa = slice(None, dd)
+-        sb = slice(dd, dd * 2)
+-        sc = slice(dd * 2, dd * 3)
+-        def G(s):
+-            w = [slice(None) for _ in range(4)]
+-            w[axis] = s
+-            return tuple(w)
+-        ssa = G(sa)
+-        ssb = G(sb)
+-        ssc = G(sc)
+-        assert np.allclose(l.dY[ssa], l.dX[0]) 
+-        assert np.allclose(l.dY[ssb], l.dX[1]) 
+-        assert np.allclose(l.dY[ssc], l.dX[2]) 
+-
+-    for axis in range(4):
+-        go_concat(axis = axis)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_slice.py`:
+-
+-```````py
+-import mobula
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_slice():
+-    X = np.arange(60).reshape((5,3,2,2))
+-
+-    l = L.Slice(L.Data(X), "slice", axis = 0, slice_points = [1, 2])
+-
+-    Y1, Y2, Y3 = l()
+-
+-    l.reshape()
+-    l.forward()
+-
+-    a1 = Y1.Y.size
+-    a2 = Y2.Y.size
+-    a3 = Y3.Y.size
+-
+-    Y1.dY = np.arange(0, a1).reshape(Y1.Y.shape)
+-    Y2.dY = np.arange(a1, a1 + a2).reshape(Y2.Y.shape)
+-    Y3.dY = np.arange(a1 + a2, a1 + a2 + a3).reshape(Y3.Y.shape)
+-
+-    l.backward()
+-
+-    print ("X: ", X.shape, X.ravel())
+-    print ("Y1: ", Y1.Y.shape, Y1.Y.ravel())
+-    print ("Y2: ", Y2.Y.shape, Y2.Y.ravel())
+-    print ("Y3: ", Y3.Y.shape, Y3.Y.ravel())
+-
+-    print ("dX: ", l.dX.shape, l.dX.ravel())
+-
+-    y = np.concatenate([Y1.Y.ravel(), Y2.Y.ravel(), Y3.Y.ravel()])
+-    assert (X.ravel() == y).all()
+-    assert (l.dX.ravel() == np.arange(l.dX.size)).all()
+-
+-def test_slice2():
+-    def go_slice1(axis):
+-        X = np.arange(6*7*8*9).reshape((6,7,8,9))
+-        slice_point = 5
+-        l = L.Slice(X, axis = axis, slice_point = slice_point)
+-        y1, y2 = l
+-        l.reshape()
+-        l.forward()
+-        axes1 = [slice(None)] * 4
+-        axes2 = [slice(None)] * 4
+-        axes1[axis] = slice(None, slice_point) 
+-        axes2[axis] = slice(slice_point, None) 
+-        assert np.allclose(y1.Y, X[tuple(axes1)])
+-        assert np.allclose(y2.Y, X[tuple(axes2)])
+-
+-        y1.dY = np.random.random(y1.Y.shape)
+-        y2.dY = np.random.random(y2.Y.shape)
+-        l.backward()
+-        assert np.allclose(l.dX, np.concatenate([y1.dY, y2.dY], axis = axis))
+-    def go_slice2(axis):
+-        X = np.arange(6*7*8*9).reshape((6,7,8,9))
+-        l = L.Slice(X, axis = axis, slice_points = [3,5])
+-        y1,y2,y3 = l
+-        l.reshape()
+-        l.forward()
+-        axes1 = [slice(None)] * 4
+-        axes2 = [slice(None)] * 4
+-        axes3 = [slice(None)] * 4
+-        axes1[axis] = slice(None, 3) 
+-        axes2[axis] = slice(3, 5) 
+-        axes3[axis] = slice(5, None) 
+-        assert np.allclose(y1.Y, X[tuple(axes1)])
+-        assert np.allclose(y2.Y, X[tuple(axes2)])
+-        assert np.allclose(y3.Y, X[tuple(axes3)])
+-
+-
+-        y1.dY = np.random.random(y1.Y.shape)
+-        y2.dY = np.random.random(y2.Y.shape)
+-        y3.dY = np.random.random(y3.Y.shape)
+-        l.backward()
+-        assert np.allclose(l.dX, np.concatenate([y1.dY, y2.dY, y3.dY], axis = axis))
+-    for axis in range(4):
+-        go_slice1(axis = axis)
+-        go_slice2(axis = axis)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_data.py`:
+-
+-```````py
+-import mobula
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_data():
+-    X = np.arange(1, 11).reshape((10, 1))
+-
+-    target = [[1,2,3],[4,5,6],[7,8,9],[2,3,4],[5,6,7],[8,9,10]]
+-
+-    def go_data(data):
+-        data.reshape()
+-
+-        for i in range(50):
+-            data.forward()
+-            assert (data.Y.ravel() == target[i % 6]).all()
+-
+-    data = L.Data(X, batch_size = 3)
+-    assert data.batch_size == 3
+-    go_data(data)
+-    data = L.Data(X, batch_size = 3)()
+-    go_data(data)
+-    [data] = L.Data(X, batch_size = 3)
+-    go_data(data)
+-    data = L.Data(X, batch_size = 3)(0)
+-    go_data(data)
+-    data = L.Data([X, X.copy()], batch_size = 3)(1)
+-    go_data(data)
+-
+-def test_data_args():
+-    X = np.random.random((10, 3))
+-    Y = np.random.random((10, 3))
+-    d1 = L.Data([X,Y], "data1")
+-    lx1, ly1 = d1()
+-    d2 = L.Data(X, Y, "data2")
+-    lx2, ly2 = d2()
+-    assert np.allclose(lx1.Y, lx2.Y)
+-    assert np.allclose(ly1.Y, ly2.Y)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_softmax.py`:
+-
+-```````py
+-import mobula.layers as L
+-from mobula.testing import gradcheck
+-from mobula.layers.utils.Defines import *
+-import numpy as np
+-
+-def test_softmax():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W)) - 0.5
+-    for axis in range(4):
+-        l = L.Softmax(a, axis = axis)
+-        label = np.random.randint(0, a.shape[axis], size = a.size // a.shape[axis])
+-        loss_l = L.SoftmaxWithLoss(a, axis = axis, label = label)
+-
+-        l.reshape()
+-        loss_l.reshape()
+-
+-        y = l.eval()
+-        loss = loss_l.eval()
+-
+-        exp = np.exp(a)
+-        su = np.sum(exp, axis = axis)
+-        axes = [slice(None)] * 4
+-        axes[axis] = np.newaxis
+-        pu = [1] * 4
+-        pu[axis] = a.shape[axis]
+-        s = np.tile(su[tuple(axes)], pu)
+-
+-        # softmax forward
+-        assert np.allclose(y, exp / s)
+-        assert np.allclose(np.sum(y, axis), np.ones(su.shape))
+-        # softmax-with-loss forward
+-        assert np.allclose(loss_l.softmax, l.Y)
+-        assert np.allclose(loss_l.Y, -np.mean(np.log(get_val_from_arg(y, label, axis))))
+-        # softmax backward
+-        l.dY = np.random.random(l.Y.shape)
+-        l.backward()
+-        # softmax-with-loss backward
+-        loss_l.dY = np.random.random(loss_l.Y.shape)
+-        loss_l.backward()
+-        z = np.zeros(y.shape)
+-        z.ravel()[get_idx_from_arg(z, label, axis)] = 1
+-        tl = y - z 
+-        assert np.allclose(tl * loss_l.dY, loss_l.dX)
+-
+-def test_softmax_grad():
+-    N, C, H, W = 2, 3, 4, 5
+-    a = np.random.random((N, C, H, W)) - 0.5
+-    for axis in range(4):
+-        l = L.Softmax(a, axis = axis)
+-        gradcheck(l, a)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_dropout.py`:
+-
+-```````py
+-import mobula.layers as L
+-from mobula.Defines import *
+-import numpy as np
+-
+-class Net:
+-    phase = TRAIN
+-
+-def test_dropout():
+-    x = np.random.random((2,4,6,8))
+-    p = 0.6
+-    scale = 1.0 / (1.0 - p)
+-    l = L.Dropout(x, ratio = p)
+-    # Train
+-    l.net = Net()
+-    l.reshape()
+-    l.forward()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-
+-    b = l.mask
+-    assert np.allclose(l.Y[b], l.X[b] * scale)
+-    assert (l.Y[~b] == 0).all()
+-    assert np.allclose(l.dX[b], l.dY[b] * scale)
+-    assert (l.dX[~b] == 0).all()
+-
+-    # Test
+-    Net.phase = TEST
+-    l.reshape()
+-    l.forward()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-
+-    assert np.allclose(l.Y, l.X)
+-    assert np.allclose(l.dY, l.dX)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_name.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_name():
+-    a = np.arange(10)
+-    b = np.zeros((3,5))
+-    c = np.arange(1, 11)
+-    test1 = [str(L.Data(a)), str(L.Data([a,b])), str(L.Data(None))]
+-    test1_truth = ["<Data '/Data' input: (10,) num_output: (1)>", "<Data '/Data' input: [(10,), (3, 5)] num_output: (2)>", "<Data '/Data' input: None num_output: (0)>"]
+-    print (test1)
+-    assert test1 == test1_truth
+-
+-    test2 = [str(L.ReLU(L.Data(a))), str(L.ReLU(L.FC(L.Data(b), dim_out = 10)))]
+-    test2_truth = ["<ReLU '/ReLU' input: /Data:0 num_output: (1)>", "<ReLU '/ReLU' input: /FC:0 num_output: (1)>"]
+-    print (test2)
+-    assert test2 == test2_truth
+-
+-    la, lc = L.Data([a,c])
+-    concat = L.Concat([la, lc], axis = 0)
+-    test3 = [str(concat)]
+-    test3_truth = ["<Concat '/Concat' input: [/Data:0,/Data:1] num_output: (1)>"]
+-    print (test3)
+-    assert test3 == test3_truth
+-
+-    l = L.ReLU(a)
+-    test4 = [str(l)]
+-    test4_truth = ["<ReLU '/ReLU' input: (10,) num_output: (1)>"]
+-    print (test4)
+-    assert test4 == test4_truth
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_pool.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def go_pool(stride, kernel, kind):
+-    print ("test_pool", stride, kernel, kind)
+-    X = np.random.random((2, 3, 10, 10)) * 100
+-    N, C, H, W = X.shape
+-
+-    data = L.Data(X)
+-    pool = L.Pool(data, kernel = kernel, stride = stride, pool = kind)
+-
+-    kernel_h = kernel_w = kernel
+-
+-    NH = (H - kernel_h) // stride + 1
+-    NW = (W - kernel_w) // stride + 1
+-
+-    data.reshape()
+-    pool.reshape()
+-
+-    ty = np.zeros((N, C, NH, NW))
+-    tyi = np.zeros(ty.shape)
+-    for i in range(N):
+-        x = X[i]
+-        for d in range(C):
+-            for h in range(NH):
+-                for w in range(NW): 
+-                    th = h * stride
+-                    tw = w * stride
+-                    a = x[d, th:th+kernel, tw:tw+kernel]
+-                    mi = -1
+-
+-                    if kind == L.Pool.MAX:
+-                        e = np.max(a)
+-                        mi = np.argmax(a)
+-                    else:
+-                        # avg
+-                        e = np.mean(a)
+-
+-                    ty[i, d, h, w] = e
+-                    tyi[i, d, h, w] = mi
+-
+-    pool.forward()
+-    assert np.allclose(pool.Y, ty)
+-
+-    pool.dY = np.random.random(pool.Y.shape) * 39
+-
+-    dX = np.zeros(pool.X.shape)
+-    if kind == L.Pool.MAX:
+-        for i in range(N):
+-            for d in range(C):
+-                for h in range(NH):
+-                    for w in range(NW): 
+-                        mi = tyi[i, d, h, w]
+-                        th = h * stride
+-                        tw = w * stride
+-                        a = dX[i, d, th:th+kernel, tw:tw+kernel]
+-                        a[int(mi) // kernel, int(mi) % kernel] += pool.dY[i, d, h, w] 
+-    else:
+-        for i in range(N):
+-            for d in range(C):
+-                for h in range(NH):
+-                    for w in range(NW): 
+-                        mi = tyi[i, d, h, w]
+-                        th = h * stride
+-                        tw = w * stride
+-                        dX[i, d, th:th+kernel, tw:tw+kernel] += pool.dY[i, d, h, w] / (kernel * kernel)
+-                
+-    pool.backward()
+-    assert np.allclose(pool.dX, dX)
+-
+-
+-def test_pool():
+-    for kernel in [2, 3, 5, 10]: 
+-        for stride in [1, 2, 3]:
+-            for kind in [L.Pool.MAX, L.Pool.AVG]:
+-                go_pool(stride, kernel, kind)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_eval.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_eval():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    data_a = L.Data()
+-    data_b = L.Data()
+-    r_add = data_a + data_b
+-    r_multiply = data_a * data_b
+-    r_subtract = data_a - data_b
+-    datas = {
+-            data_a: a,
+-            data_b: b
+-    }
+-    assert np.allclose(r_add.eval(datas), a + b)
+-    assert np.allclose(r_multiply.eval(datas), np.multiply(a,b))
+-    assert np.allclose(r_subtract.eval(datas), a - b)
+-
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    datas = {
+-            data_a: a,
+-            data_b: b
+-    }
+-    assert np.allclose(r_add.eval(datas), a + b)
+-    assert np.allclose(r_multiply.eval(datas), np.multiply(a,b))
+-    assert np.allclose(r_subtract.eval(datas), a - b)
+-
+-    N,C,H,W = 1,3,2,4
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    datas = {
+-            data_a: a,
+-            data_b: b
+-    }
+-    assert np.allclose(r_add.eval(datas), a + b)
+-    assert np.allclose(r_multiply.eval(datas), np.multiply(a,b))
+-    assert np.allclose(r_subtract.eval(datas), a - b)
+-
+-def test_list_eval():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    l = L.Data([a,b])
+-    [la, lb] = l
+-    w = la + lb
+-    c = np.random.random((N, C, H, W))
+-    d = np.random.random((N, C, H, W))
+-    datas = {l:[c, d]}
+-    np.allclose(c + d, w.eval(datas))
+-
+-    N,C,H,W = 1,3,4,2
+-    c = np.random.random((N, C, H, W))
+-    d = np.random.random((N, C, H, W))
+-    datas = {l:[c, d]}
+-    np.allclose(c + d, w.eval(datas))
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_layers/test_conv.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def go_conv(stride, pad):
+-    X = np.random.random((2, 4, 10, 10)) * 100
+-    N, C, H, W = X.shape
+-    K = 3
+-    D = 2
+-    FW = np.random.random((D, C, K * K)) * 10
+-    F = FW.reshape((D, C, K, K))
+-
+-    data = L.Data(X)
+-    conv = L.Conv(data, kernel = K, pad = pad, stride = stride, dim_out = D)
+-
+-    pad_h = pad_w = pad
+-    kernel_h = kernel_w = K
+-
+-    XH = H
+-    XW = W
+-
+-    NH = (XH + pad_h * 2 - kernel_h) // stride + 1
+-    NW = (XW + pad_w * 2 - kernel_w) // stride + 1
+-
+-    data.reshape()
+-    conv.reshape()
+-
+-    conv.W = FW
+-    conv.b = np.random.random(conv.b.shape) * 10
+-
+-    ty = np.zeros((N, D, NH, NW))
+-    for i in range(N):
+-        x = X[i]
+-        x = np.pad(x, ((0,0),(pad_h,pad_h),(pad_w,pad_w)), "constant")
+-        for d in range(D):
+-            f = F[d] # 4, 3, 3
+-            for h in range(NH):
+-                for w in range(NW): 
+-                    th = h * stride
+-                    tw = w * stride
+-                    a = x[:, th:th+K, tw:tw+K]
+-                    e = np.sum(a * f)
+-                    ty[i, d, h, w] = e
+-        ty[i] += conv.b.reshape((D, 1, 1))
+-    conv.forward()
+-    print (np.max(np.abs(conv.Y - ty)), conv.Y.shape)
+-    assert np.allclose(conv.Y, ty)
+-
+-    conv.dY = np.random.random(conv.Y.shape) * 50
+-    # test backward, dX, dW, db
+-    conv.backward()
+-
+-    db = np.sum(conv.dY, (0, 2, 3)).reshape(conv.b.shape)
+-
+-    dF = np.zeros((D, C, K, K))
+-    dX = np.zeros(X.shape)
+-    # sample
+-    for i in range(N):
+-        x = X[i]
+-        x = np.pad(x, ((0,0),(pad_h,pad_h),(pad_w,pad_w)), "constant")
+-        # output
+-        for d in range(D):
+-            # channels
+-            for c in range(C):
+-                for h in range(NH):
+-                    for w in range(NW):
+-                        # ty[i,d,h,w]
+-                        for fh in range(K):
+-                            for fw in range(K):
+-                                # ty[i,d,h,w] += sum ~ F[d, c, fh, fw] * X[i, c, h*s + fh, w*s + fw]
+-                                ph = h * stride + fh
+-                                pw = w * stride + fw
+-                                dF[d, c, fh, fw] += conv.dY[i, d, h, w] * x[c, ph, pw]
+-                                oh = ph - pad_h
+-                                ow = pw - pad_w
+-                                if oh >= 0 and ow >= 0 and oh < H and ow < W:
+-                                    dX[i, c, oh, ow] += conv.dY[i, d, h, w] * F[d, c, fh, fw]
+-
+-    assert np.allclose(conv.db, db.reshape(conv.db.shape))
+-    assert np.allclose(conv.dW, dF.reshape(conv.dW.shape))
+-    assert np.allclose(conv.dX, dX)
+-
+-
+-def test_conv():
+-    go_conv(1, 0)
+-    go_conv(2, 0)
+-    go_conv(3, 0)
+-    go_conv(1, 1)
+-    go_conv(2, 1)
+-    go_conv(3, 1)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_abs.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.operators as O
+-import numpy as np
+-
+-def test_abs():
+-    X = np.random.random((3,4,5)) - 0.5
+-    l = M.abs(X)
+-    assert np.allclose(l.eval(), np.abs(X))
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    dX = np.zeros(X.shape)
+-    dX[X > 0] = l.dY[X > 0]
+-    dX[X < 0] = -l.dY[X < 0]
+-    assert np.allclose(dX, l.dX)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_power.py`:
+-
+-```````py
+-import mobula.operators as O
+-import numpy as np
+-
+-def test_power():
+-    N, C, H, W = 1,2,1,3
+-    a = np.random.random((N, C, H, W))
+-    for n in range(4):
+-        l = O.Power(a, n = n)
+-        y = l.eval()
+-        l.dY = np.random.random(l.Y.shape)
+-        l.backward()
+-        assert np.allclose(y, np.power(a, n))
+-        assert np.allclose(l.dX, n * np.power(a, n-1)*l.dY)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_add.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_add():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    c = np.random.random((N, C, H, W))
+-    l = L.Add([a, b], "add1")
+-    assert l.name == "/add1"
+-    l.reshape()
+-    l.forward()
+-    assert np.allclose(a + b, l.Y)
+-
+-def test_add2():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    c = np.random.random((N, C, H, W))
+-    data = L.Data([a,b,c])
+-    [la,lb,lc] = data()
+-    l = L.Add([la, lb, lc], name = "add2") 
+-    assert l.name == "/add2"
+-    l.reshape()
+-    l.forward()
+-    assert np.allclose(a + b + c, l.Y)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    for i in range(3):
+-        assert np.allclose(l.dX[i], l.dY)
+-
+-def test_add3():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    c = np.random.random((N, C, H, W))
+-    data = L.Data([a,b,c])
+-    [la,lb,lc] = data()
+-    l = la + lb
+-    data.reshape()
+-    l.reshape()
+-    assert l.shape == a.shape
+-    data.forward()
+-    l.forward()
+-    assert np.allclose(a + b, l.Y)
+-
+-def test_add4():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    c = np.random.random((N, C, H, W))
+-    data = L.Data([a,b,c])
+-    [la,lb,lc] = data()
+-    l = la + lb + lc
+-    assert type(l) == L.Add
+-    assert np.allclose(a + b + c, l.eval())
+-
+-def test_add5():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    c = np.random.random((N, C, H, W))
+-    l = L.Add(a, b, c, "add5")
+-    assert l.name == "/add5"
+-    l.reshape()
+-    l.forward()
+-    assert np.allclose(a + b + c, l.Y)
+-
+-def test_add_constant():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    data = L.Data(a)
+-    l = data + 39
+-    assert type(l) == L.AddConstant
+-    assert np.allclose(l.eval(), a + 39)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, l.dY) 
+-
+-    l = 10 + data
+-    assert type(l) == L.AddConstant
+-    assert np.allclose(l.eval(), a + 10)
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, l.dY) 
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_subtract.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_subtract():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    w = la - lb
+-    w.reshape()
+-    assert w.Y.shape == a.shape
+-    w.forward()
+-    w.dY = np.random.random(w.Y.shape)
+-    w.backward()
+-    assert np.allclose(a-b, w.Y)
+-    assert np.allclose(w.dX[0], w.dY)
+-    assert np.allclose(w.dX[1], -w.dY)
+-
+-def test_subtract_op_l():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    data = L.Data(a)
+-    l = data - 3
+-    assert type(l) == L.SubtractConstantL
+-    assert np.allclose(a - 3, l.eval())
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, l.dY)
+-
+-def test_subtract_op_r():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    data = L.Data(a)
+-    l = 3 - data
+-    print (type(l))
+-    assert type(l) == L.SubtractConstantR
+-    assert np.allclose(3 - a, l.eval())
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, -l.dY)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_exp_log.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.operators as O
+-import numpy as np
+-
+-def test_exp():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    l = O.Exp(a)
+-    y = l.eval()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    exp = np.exp(a)
+-    assert np.allclose(y, exp)
+-    assert np.allclose(l.dX, exp * l.dY)
+-
+-def test_log():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    a[a == 0] = 1.0
+-    l = O.Log(a)
+-    y = l.eval()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(y, np.log(a))
+-    assert np.allclose(l.dX, (1.0 / a) * l.dY)
+-
+-def test_exp_op():
+-    N, C, H, W = 2,3,4,5
+-    X = np.random.random((N, C, H, W))
+-    assert np.allclose(M.exp(X).eval(), np.exp(X))
+-
+-def test_log_op():
+-    N, C, H, W = 2,3,4,5
+-    X = np.random.random((N, C, H, W))
+-    X[X == 0] = 1.0
+-    assert np.allclose(M.log(X).eval(), np.log(X))
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_reduce.py`:
+-
+-```````py
+-from mobula.layers.utils.Defines import *
+-import mobula.operators as O
+-import numpy as np
+-
+-def test_reduce_mean():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    l = O.ReduceMean(a, axis = 2)
+-    y = l.eval()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(y, np.mean(a, 2))
+-    dY = np.tile(l.dY[:,:,np.newaxis,:], [1,1,4,1]) / 4
+-    assert np.allclose(l.dX, dY)
+-
+-def test_reduce_mean2():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    l = O.ReduceMean(a, axis = [1,2])
+-    y = l.eval()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(y, np.mean(a, (1,2)))
+-    dY = np.tile(l.dY[:,np.newaxis,np.newaxis,:], [1,3,4,1]) / 12
+-    assert np.allclose(l.dX, dY)
+-
+-def test_reduce_max():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    l = O.ReduceMax(a, axis = 2)
+-    y = l.eval()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(y, np.max(a, 2))
+-    assert np.allclose(get_val_from_idx(l.dX, l.idx), l.dY.ravel())
+-    em = l.dX.copy()
+-    em.ravel()[l.idx] = 0
+-    assert np.allclose(em, np.zeros(em.shape))
+-
+-
+-def test_reduce_min():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    l = O.ReduceMin(a, axis = 2)
+-    y = l.eval()
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(y, np.min(a, 2))
+-    assert np.allclose(get_val_from_idx(l.dX, l.idx), l.dY.ravel())
+-    em = l.dX.copy()
+-    em.ravel()[l.idx] = 0
+-    assert np.allclose(em, np.zeros(em.shape))
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_mul.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_multiply():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    w = la * lb
+-    w.reshape()
+-    assert w.Y.shape == a.shape
+-    w.forward()
+-    w.dY = np.random.random(w.Y.shape)
+-    w.backward()
+-    assert np.allclose(np.multiply(a, b), w.Y)
+-    assert np.allclose(w.dX[0], np.multiply(w.dY, w.X[1]))
+-    assert np.allclose(w.dX[1], np.multiply(w.dY, w.X[0]))
+-
+-def test_mul():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    data = L.Data(a)
+-    l = data * 3
+-    assert type(l) == L.MultiplyConstant
+-    assert np.allclose(a * 3, l.eval())
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, 3 * l.dY)
+-    l = 3 * data
+-    assert type(l) == L.MultiplyConstant
+-    assert np.allclose(a * 3, l.eval())
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX, 3 * l.dY)
+-
+-def test_matmul():
+-    R, N, K = 3,4,5
+-    a = np.random.random((R, N))
+-    b = np.random.random((N, K))
+-    [la, lb] = L.Data([a,b])
+-    l = L.MatMul([la, lb])
+-    assert np.allclose(l.eval(), np.dot(a, b))
+-    l.dY = np.random.random(l.Y.shape)
+-    l.backward()
+-    assert np.allclose(l.dX[0], np.dot(l.dY, b.T)) 
+-    assert np.allclose(l.dX[1], np.dot(a.T, l.dY)) 
+-    # test constant
+-    lac = M.dot(la, b)
+-    lbc = M.dot(a, lb)
+-    assert np.allclose(lac.eval(), np.dot(a, b))
+-    assert np.allclose(lbc.eval(), np.dot(a, b))
+-    lac.dY = np.random.random(lac.Y.shape)
+-    lbc.dY = np.random.random(lbc.Y.shape)
+-    lac.backward()
+-    lbc.backward()
+-    assert np.allclose(lac.dX, np.dot(lac.dY, b.T))
+-    assert np.allclose(lbc.dX, np.dot(a.T, lbc.dY))
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_compare.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.layers as L
+-import numpy as np
+-import operator
+-
+-def test_compare():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    a_copy = a.copy()
+-    [la, lb, lac] = L.Data([a,b,a_copy]) 
+-
+-    ops = [operator.ge, operator.gt, operator.le, operator.lt]
+-    for op in ops:
+-        l = op(la, lb)
+-        l2 = op(la, lac)
+-        assert np.allclose(l.eval(), op(a,b))
+-        assert np.allclose(l2.eval(), op(a,a_copy))
+-        l.backward()
+-        l2.backward()
+-        assert np.allclose(l.dX[0], np.zeros(l.X[0].shape)) 
+-        assert np.allclose(l.dX[1], np.zeros(l.X[1].shape)) 
+-        assert np.allclose(l2.dX[0], np.zeros(l2.X[0].shape)) 
+-        assert np.allclose(l2.dX[1], np.zeros(l2.X[1].shape)) 
+-
+-def test_compare_symbols():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    eq = M.equal(la, lb)
+-    ne = M.not_equal(la, lb)
+-    ge = (la >= lb)
+-    gt = (la > lb)
+-    le = (la <= lb)
+-    lt = (la < lb)
+-    
+-    lops = [eq,ne,ge,gt,le,lt]
+-    ops = [operator.eq, operator.ne, operator.ge, operator.gt, operator.le, operator.lt]
+-    for l, op in zip(lops, ops):
+-        assert l.op == op
+-
+-def test_compare_symbols_L():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    eq = M.equal(la, lb)
+-    ne = M.not_equal(la, lb)
+-    ge = (la >= b)
+-    gt = (la > b)
+-    le = (la <= b)
+-    lt = (la < b)
+-    
+-    lops = [eq,ne,ge,gt,le,lt]
+-    ops = [operator.eq, operator.ne, operator.ge, operator.gt, operator.le, operator.lt]
+-    for l, op in zip(lops, ops):
+-        assert l.op == op
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_ops.py`:
+-
+-```````py
+-import mobula as M
+-import mobula.layers as L
+-import numpy as np
+-import operator
+-
+-def test_ops():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    assert np.allclose(M.add(a, b).eval(), a + b)
+-    assert np.allclose(M.subtract(a, b).eval(), a - b)
+-    assert np.allclose(M.subtract(a, b).eval(), a - b)
+-    assert np.allclose(M.multiply(a, b).eval(), a * b)
+-    assert np.allclose(M.reduce_mean(a, axis = 2).eval(), np.mean(a, 2))
+-    assert np.allclose(M.reduce_max(a, axis = 2).eval(), np.max(a, 2))
+-    assert np.allclose(M.reduce_min(a, axis = 2).eval(), np.min(a, 2))
+-    assert np.allclose(M.positive(a).eval(), a)
+-    assert np.allclose(M.negative(a).eval(), -a)
+-
+-    R, N, K = 3,4,5
+-    a = np.random.random((R, N))
+-    b = np.random.random((N, K))
+-    assert np.allclose(M.matmul(a, b).eval(), np.dot(a, b))
+-    assert np.allclose(M.dot(a, b).eval(), np.dot(a, b))
+-
+-def test_symbols():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    eq = M.equal(la, lb)
+-    ne = M.not_equal(la, lb)
+-    ge = M.greater_equal(la, lb)
+-    gt = M.greater(la, lb)
+-    le = M.less_equal(la, lb)
+-    lt = M.less(la, lb)
+- 
+-    lops = [eq,ne,ge,gt,le,lt]
+-    ops = [operator.eq, operator.ne, operator.ge, operator.gt, operator.le, operator.lt]
+-    for l, op in zip(lops, ops):
+-        assert l.op == op
+-
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/tests/test_ops/test_sign.py`:
+-
+-```````py
+-import mobula.layers as L
+-import numpy as np
+-
+-def test_sign_pos():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    w = (+la)
+-    w.reshape()
+-    assert w.Y.shape == a.shape
+-    assert (+la) is la
+-
+-def test_sign_neg():
+-    N, C, H, W = 2,3,4,5
+-    a = np.random.random((N, C, H, W))
+-    b = np.random.random((N, C, H, W))
+-    [la, lb] = L.Data([a,b])
+-    w = -la
+-    w.reshape()
+-    assert w.Y.shape == a.shape
+-    w.forward()
+-    w.dY = np.random.random(w.Y.shape)
+-    w.backward()
+-    assert np.allclose(w.Y, -(la.Y))
+-    assert np.allclose(w.dX, -w.dY)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/docs/performance.md`:
+-
+-```````md
+-# Performance Analysis
+-
+-### Recommend using Python in Anaconda for better performance.
+-
+-## Information
+-
+-name        |value
+-------------|-----------
+-Training Set|MNIST 42000 28x28 gray
+-Batch Size  |100
+-Iterations  |2000
+-forward_times|2601
+-backward_times|2001
+-CPU			|i7-4790 CPU @ 3.60GHz
+-
+-### Python3 in Anaconda
+-
+-Accuracy: 0.991667
+-
+-Iter: 2000, Cost: 0.007383
+-
+-name	|forward_time	|backward_time	|forward_mean	|backward_mean	
+---------|---------------|---------------|---------------|---------------
+-data	|0.073538	|0.024317	|0.000028	|0.000012
+-conv1	|50.427243	|82.105529	|0.019388	|0.041032
+-pool1	|95.274342	|10.921718	|0.036630	|0.005458
+-conv2	|71.583208	|118.194660	|0.027521	|0.059068
+-pool2	|14.343701	|2.975322	|0.005515	|0.001487
+-fc3	|9.543055	|15.118490	|0.003669	|0.007555
+-relu3	|1.383795	|1.082115	|0.000532	|0.000541
+-pred	|5.047948	|6.669519	|0.001941	|0.003333
+-loss	|0.458279	|0.177457	|0.000176	|0.000089
+-
+-### Native Python3
+-
+-Accuracy: 0.991667
+-
+-Iter: 2000, Cost: 0.007383
+-
+-name	|forward_time	|backward_time	|forward_mean	|backward_mean	
+---------|---------------|---------------|---------------|---------------
+-data	|0.039973	|0.019009	|0.000015	|0.000009
+-conv1	|76.094196	|114.764927	|0.029256	|0.057354
+-pool1	|72.345203	|10.924688	|0.027814	|0.005460
+-conv2	|370.081568	|476.961305	|0.142284	|0.238361
+-pool2	|9.614037	|2.431894	|0.003696	|0.001215
+-fc3	|83.233347	|85.736211	|0.032001	|0.042847
+-relu3	|0.765435	|0.561773	|0.000294	|0.000281
+-pred	|1.098624	|1.267450	|0.000422	|0.000633
+-loss	|0.276948	|0.102970	|0.000106	|0.000051
+-
+-### Native Python2
+-
+-Accuracy: 0.991667
+-
+-Iter: 2000, Cost: 0.007383
+-
+-name	|forward_time	|backward_time	|forward_mean	|backward_mean	
+---------|---------------|---------------|---------------|---------------
+-data	|0.039304	|0.018812	|0.000015	|0.000009
+-conv1	|77.984102	|117.541489	|0.029982	|0.058741
+-pool1	|73.096253	|11.021775	|0.028103	|0.005508
+-conv2	|373.498943	|489.150597	|0.143598	|0.244453
+-pool2	|10.090908	|2.586956	|0.003880	|0.001293
+-fc3	|83.812420	|86.976251	|0.032223	|0.043466
+-relu3	|0.766895	|0.567209	|0.000295	|0.000283
+-pred	|1.100621	|1.267404	|0.000423	|0.000633
+-loss	|0.278426	|0.091963	|0.000107	|0.000046
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/docs/references.md`:
+-
+-```````md
+-Initial Value:
+-Random, pre-train, RBM
+-
+-BP:
+-http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2015_2/Lecture/DNN%20backprop.ecm.mp4/index.html
+-
+-Deep Residual Learning for Image Recognition
+-https://arxiv.org/abs/1512.03385
+-
+-Early Stopping
+-
+-numpy加速：
+-http://python.jobbole.com/81310/
+-
+-tensordot:
+-http://m.blog.csdn.net/article/details?id=52526056
+-
+-L2正则化:
+-http://blog.csdn.net/u012162613/article/details/44261657
+-
+-范数：
+-http://blog.csdn.net/zouxy09/article/details/24971995
+-
+-神经网络训练中的Tricks之高效BP（反向传播算法）:
+-http://blog.csdn.net/zouxy09/article/details/45288129k
+-
+-激活函数：
+-http://blog.csdn.net/memray/article/details/51442059
+-
+-numpy:
+-http://blog.csdn.net/DawnRanger/article/details/53125945
+-
+-dropout:
+-https://zhuanlan.zhihu.com/p/22060265
+-http://m.blog.csdn.net/elaine_bao/article/details/50890473
+-
+-CNN卷积前后向推导:
+-http://blog.csdn.net/chenhoujiangsir/article/details/51077468
+-
+-col2im:
+-http://blog.csdn.net/sunshine_in_moon/article/details/50110279
+-
+-RNN:
+-http://blog.csdn.net/prom1201/article/details/52221822
+-
+-GAN:
+-https://www.leiphone.com/news/201703/Y5vnDSV9uIJIQzQm.html
+-https://www.leiphone.com/news/201701/yZvIqK8VbxoYejLl.html?viewType=weixin
+-https://www.leiphone.com/news/201706/XImHOGS3pKkSeDtm.html
+-https://sanwen.net/a/hzyfmqo.html
+-
+-numpy-ufunc.at perfomance >10x too slow
+-https://github.com/numpy/numpy/issues/5922
+-
+-SELU:
+-https://arxiv.org/pdf/1706.02515.pdf
+-
+-各种优化方法总结比较（sgd/momentum/Nesterov/adagrad/adadelta）:
+-http://blog.csdn.net/luo123n/article/details/48239963
+-
+-自适应学习率调整：AdaDelta
+-http://www.cnblogs.com/neopenx/p/4768388.html
+-
+-lr_policy:
+-http://www.cnblogs.com/denny402/p/5074049.html
+-
+-batch_normalization
+-http://blog.csdn.net/shuzfan/article/details/50723877
+-https://zhuanlan.zhihu.com/p/26662328?refer=carefree0910-pyml
+-http://blog.csdn.net/lanran2/article/details/56278072
+-http://blog.csdn.net/happynear/article/details/44238541
+-
+-Adam:
+-http://www.sohu.com/a/156495506_465975
+-
+-dlsys-course:
+-https://github.com/dlsys-course
+-
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/README.md`:
+-
+-```````md
+-# Mobula
+-
+-[![](https://api.travis-ci.org/wkcn/mobula.svg?branch=master)](https://travis-ci.org/wkcn/mobula)
+-[![Coverage Status](https://coveralls.io/repos/github/wkcn/mobula/badge.svg?branch=master)](https://coveralls.io/github/wkcn/mobula?branch=master)
+-
+-## What is it?
+-*Mobula* is a light deep learning framework on python.
+-
+-It's **an efficent Python-DNN Implementation used numpy mainly**, and it's aimed to learn **how a neural network runs** :-)
+-
+-## What can I do with it?
+-1. Deploy a Deep Neural Network, try to explore how it works when DNN is training or testing.
+-2. Implement some interesting layers quickly and make a test.
+-
+-## Benefit
+-
+-- Easy to Configure
+-
+-    Mobula needs less dependence. It is implemented by numpy mainly, so you can setup it easily.
+-
+-- Easy to modify
+-
+-	Mobula is implemented by only Python. You can modify the code easily to implement what you want.
+-
+-## How to install it?
+-- Git:
+-```bash
+-git clone https://github.com/wkcn/mobula --recursive
+-```
+-
+-- pip:
+-```bash
+-pip install mobula
+-```
+-
+-## Layers
+-*Mobula* has implemented these layers using numpy. It's efficient relatively on Python Implementation.
+-
+-The Layers supports multi-input and multi-output.
+-
+-#### Layers with Learning
+-- FC - Fully Connected Layer
+-- Conv - Convolution
+-- ConvT - Transposed Convolution
+-- BatchNorm
+-#### Layers without Learning
+-- Pool - Pooling
+-- Dropout
+-- Reshape
+-- Crop
+-- L0Norm, L1Norm, L2Norm (TODO)
+-#### Activation Layer
+-- Sigmoid
+-- ReLU
+-- PReLU
+-- SELU
+-- Tanh
+-- Softmax
+-#### Multi I/O Layer
+-- Concat
+-- Slice
+-- Eltwise
+-#### Cost Layer
+-- MSE - Mean Square Error
+-- CrossEntropy
+-- SigmoidCrossEntropy
+-- SoftmaxWithLoss 
+-- SmoothL1Loss
+-- ContrastiveLoss
+-#### Evaluation Layer (No Backward)
+-- Accuracy (top_k)
+-#### Operators
+-- add, subtract
+-- multiply, matmul, dot
+-- positive, negative, abs
+-- exp, log
+-- reduce_mean, reduce_max, reduce_min
+-- equal, not_equal
+-- greater_equal, greater, less_equal, less
+-
+-## Solvers
+-
+-*Mobula* supports various solvers.
+-
+-- SGD
+-- Momentum
+-
+-## Quick Start
+-
+-##### Notice: Recommend using Python in Anaconda, because of **Calculating Optimization numpy-mkl** in Anaconda.
+-
+-The detail is in [Performance Analysis](docs/performance.md).
+-
+-#### Digital Recognition
+-Let's construct a **Convolution Nerual Network** on *Mobula*! 
+-
+-We use **LeNet-5** to solve *Digital Recognition* problem on Kaggle.
+-
+-The score is above 0.99 in training for several minutes.
+-
+-Firstly, you need to download the dataset train.csv and test.csv into **test/** folder. 
+-
+-Secondly, constructing the **LeNet-5**.
+-
+-The core code is that:
+-
+-```python
+-
+-import mobula
+-import mobula.layers as L
+-import mobula.solvers as S
+-
+-[...]
+-
+-data, label = L.Data([X, labels], "data", batch_size = 100)
+-conv1 = L.Conv(data, dim_out = 20, kernel = 5)
+-pool1 = L.Pool(conv1, pool = L.Pool.MAX, kernel = 2, stride = 2)
+-relu1 = L.ReLU(pool1)
+-conv2 = L.Conv(relu1, dim_out = 50, kernel = 5)
+-pool2 = L.Pool(conv2, pool = L.Pool.MAX, kernel = 2, stride = 2)
+-relu2 = L.ReLU(pool2)
+-fc3   = L.FC(relu2, dim_out = 500)
+-relu3 = L.ReLU(fc3)
+-pred  = L.FC(relu3, "pred", dim_out = 10)
+-loss  = L.SoftmaxWithLoss(pred, "loss", label = label)
+-
+-# Net Instance
+-net = mobula.Net()
+-
+-# Set Loss Layer
+-net.set_loss(loss)
+-
+-# Set Solver
+-net.set_solver(S.Momentum())
+-
+-# Learning Rate
+-net.lr = 0.2
+-
+-```
+-
+-The training and predicting codes are in **examples/** folders, namely **mnist_train.py** and **mnist_test.py**.
+-
+-For training the network, 
+-```bash
+-python mnist_train.py
+-```
+-
+-When the number of iterations is 2000, the accuracy on training set is above 0.99.
+-
+-For predicting test.csv,  
+-```bash
+-python mnist_test.py
+-```
+-
+-At Line 53 in *mnist_test.py*, `iter_num` is the iterations of the model which is used to predict test set. 
+-
+-Enjoy it! :-)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/setup.py`:
+-
+-```````py
+-from setuptools import setup, find_packages
+-
+-setup(
+-        name = 'mobula',
+-        version = '1.0.1',
+-        description = 'A Lightweight & Flexible Deep Learning (Neural Network) Framework in Python',
+-        author = 'wkcn',
+-        author_email = 'wkcn@live.cn',
+-        url = 'https://github.com/wkcn/mobula',
+-        packages = find_packages(),
+-        package_data = {
+-            '' : ['*.md'],
+-            'docs' : ['docs/*.md'],
+-            'examples' : ['examples/*.py']
+-        },
+-        keywords = 'Deep Learning Framework in Python',
+-        license = 'MIT',
+-        classifiers = [
+-            'Programming Language :: Python',
+-            'Programming Language :: Python :: 2',
+-            'Programming Language :: Python :: 3',
+-            'Topic :: Scientific/Engineering :: Mathematics',
+-            'License :: OSI Approved :: MIT License'
+-        ],
+-        install_requires = [
+-            'numpy',
+-            'numpy_groupies'
+-        ]
+-)
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/examples/mnist_train.py`:
+-
+-```````py
+-from defines import *
+-import mobula
+-import mobula.layers as L
+-import mobula.solvers as S
+-import os
+-from LeNet5 import *
+-
+-INPUT_FILE = "./train.csv"
+-RESULT_PATH = "./mnist_kaggle"
+-
+-# Create the directory if it doesn't exists
+-if not os.path.exists(RESULT_PATH):
+-    os.mkdir(RESULT_PATH)
+-
+-# Load Data
+-try:
+-    fin = open(INPUT_FILE)
+-except:
+-    print ("%s doesn't exist. Please download the dataset on Kaggle: https://www.kaggle.com/c/digit-recognizer" % INPUT_FILE)
+-    import sys
+-    sys.exit()
+-
+-data = np.loadtxt(fin, delimiter = ",", skiprows = 1)
+-fin.close()
+-
+-n = len(data)
+-X = data[:, 1:]
+-labels = data[:, 0].astype(np.int)
+-# one-hot
+-#Y = np.eye(10)[labels.ravel()] 
+-print ("Read OK", n)
+-
+-Xmean = np.mean(X, 0)
+-np.save("xmean.npy", Xmean)
+-
+-# Subtract mean and normalize
+-X = (X - Xmean) / 255.0
+-
+-# transfer the shape of X to NCHW
+-# N, C, H, W = n, 1, 28, 28
+-X.resize((n, 1, 28, 28))
+-
+-# Get LeNet5
+-nn = LeNet5(X, labels)
+-net = nn.net
+-
+-# Set Solver
+-net.set_solver(S.Momentum())
+-
+-# Learning Rate
+-net.lr = 0.005
+-
+-'''
+-If start_iter > 0, load the existed model and continue to train.
+-Otherwise, initialize weights and start to train. 
+-'''
+-
+-start_iter = 0 
+-max_iter = 100000
+-filename = RESULT_PATH + "/kaggle%d.net"
+-if start_iter > 0:
+-    # Load the weights from the existed model
+-    net.load(filename % start_iter)
+-
+-for i in range(start_iter, max_iter):
+-    net.forward()
+-    net.backward()
+-
+-    if i % 100 == 0:
+-        print ("Iter: %d, Cost: %f" % (i, nn.loss))
+-        net.time()
+-
+-        # test 30 iteration
+-        vs = []
+-        for u in range(30):
+-            net.forward()
+-            pre = np.argmax(nn.Y,1).ravel()
+-            ra = nn.label.ravel()
+-            if u % 10 == 0: 
+-                print ((pre, ra))
+-            bs = (pre == ra) 
+-            b = np.mean(bs)
+-            vs.append(b)
+-        acc = np.mean(vs)
+-        print ("Accuracy: %f" % (acc))
+-        if i % 200 == 0 and acc > 0.95:
+-            net.save(filename % i)
+-
+-print ("Over :-)")
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/examples/logo.py`:
+-
+-```````py
+-from defines import *
+-import mobula
+-import mobula.layers as L
+-import mobula.solvers as S
+-from scipy.misc import imread, imresize, imsave
+-import matplotlib.pyplot as plt
+-import numpy as np
+-
+-target_size = (42, 42)
+-im = imread("./mobula.png")
+-
+-# Reshape
+-im = imresize(im, target_size)
+-
+-# TO GRAY
+-im = im[:,:,0] * 0.299 + im[:,:,1] * 0.587 + im[:,:,2] * 0.114
+-h, w = im.shape
+-
+-t = 1
+-Y = im.reshape((1, h, w, t)).transpose((0, 3, 1, 2))
+-X = np.random.random((1, t, h, w)) - 0.5
+-
+-data, label = L.Data([X, Y])
+-conv = L.Conv(data, dim_out = 42, kernel = 3, pad = 1)
+-relu = L.ReLU(conv)
+-convt = L.ConvT(relu, dim_out = t, kernel = 3, pad = 1)
+-relu2 = L.ReLU(convt)
+-loss = L.MSE(relu2, label = label)
+-
+-# Net Instance
+-net = mobula.Net()
+-# Set Loss Layer
+-net.set_loss(loss)
+-# Set Solver
+-net.set_solver(S.Momentum())
+-
+-# Learning Rate
+-net.lr = 2e-6 
+-
+-start_iter = 0 
+-max_iter = 10000
+-plt.ion()
+-for i in range(start_iter, max_iter + 1):
+-    net.forward()
+-    net.backward()
+-
+-    if i % 100 == 0:
+-        print ("Iter: %d, Cost: %f" % (i, loss.loss))
+-        net.time()
+-        if i % 100 == 0:
+-            im = relu2.Y.reshape((h,w))
+-            plt.title("Iter: %d" % i)
+-            plt.imshow(im, "gray")
+-            plt.show()
+-            plt.pause(0.001)
+-
+-plt.ioff()
+-plt.show()
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/examples/mnist_predict.py`:
+-
+-```````py
+-from defines import *
+-import mobula
+-import mobula.layers as L
+-import mobula.solvers as S
+-import os
+-from LeNet5 import *
+-
+-INPUT_FILE = "./test.csv"
+-RESULT_PATH = "./mnist_kaggle"
+-
+-# Create the directory if it doesn't exists
+-if not os.path.exists(RESULT_PATH):
+-    os.mkdir(RESULT_PATH)
+-
+-# Load Data
+-try:
+-    fin = open(INPUT_FILE)
+-except:
+-    print ("%s doesn't exist. Please download the dataset on Kaggle: https://www.kaggle.com/c/digit-recognizer" % INPUT_FILE)
+-    import sys
+-    sys.exit()
+-
+-data = np.loadtxt(fin, delimiter = ",", skiprows = 1)
+-fin.close()
+-
+-n = len(data)
+-X = data
+-print ("Read OK", n)
+-
+-Xmean = np.load("xmean.npy")
+-
+-# Subtract mean and normalize
+-X = (X - Xmean) / 255.0
+-
+-# labels as index for predicting
+-labels = np.arange(n)
+-
+-# transfer the shape of X to NCHW
+-# N, C, H, W = n, 1, 28, 28
+-X.resize((n, 1, 28, 28))
+-
+-# Get LeNet5
+-nn = LeNet5(X, labels)
+-net = nn.net
+-data_layer = net["data"]
+-index = data_layer(1)
+-
+-'''
+-If iter_num > 0, load the existed model and continue to train.
+-Otherwise, initialize weights and start to train. 
+-'''
+-
+-iter_num = 25200 
+-
+-filename = RESULT_PATH + "/kaggle%d.net"
+-if iter_num > 0:
+-    # Load the weights from the existed model
+-    net.load(filename % iter_num)
+-
+-ok = 0
+-res = [None] * n
+-while ok < n:
+-    net.forward()
+-    pre = np.argmax(nn.Y,1)
+-    for d in range(data_layer.batch_size):
+-        ind = index.Y[d]
+-        if res[ind] == None:
+-            ok += 1
+-            print ("%d / %d" % (ok, n))
+-        res[ind] = pre[d]
+-fout = open("result-%d.csv" % iter_num, "w")
+-fout.write("ImageId,Label\n")
+-for i in range(n):
+-    fout.write("%d,%d\n" % (i + 1, res[i]))
+-
+-print ("Over :-)")
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/examples/defines.py`:
+-
+-```````py
+-import sys
+-import os
+-
+-PATH = os.path.dirname(__file__)
+-sys.path.append(PATH + "/..")
+-
+-from mobula.Defines import *
+-import numpy as np
+-import random
+-
+-random.seed(1019)
+-np.random.seed(1019)
+-
+-
+-def test_layer_y(layer, X):
+-    from mobula.layers import Data
+-    data = Data(X, "data") 
+-    data.reshape()
+-    l = layer(data, "testLayer")
+-    l.reshape()
+-    data.forward()
+-    l.forward()
+-    l.dY = np.ones(l.Y.shape)
+-    l.backward()
+-    return l.Y, l.dX
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/examples/LeNet5.py`:
+-
+-```````py
+-from defines import *
+-import numpy as np
+-import mobula
+-import mobula.layers as L
+-
+-class LeNet5:
+-    def __init__(self, X, labels):
+-
+-        data, label = L.Data([X, labels], "data", batch_size = 100)
+-        conv1 = L.Conv(data, dim_out = 20, kernel = 5)
+-        pool1 = L.Pool(conv1, pool = L.Pool.MAX, kernel = 2, stride = 2)
+-        relu1 = L.ReLU(pool1)
+-        conv2 = L.Conv(relu1, dim_out = 50, kernel = 5)
+-        pool2 = L.Pool(conv2, pool = L.Pool.MAX, kernel = 2, stride = 2)
+-        relu2 = L.ReLU(pool2)
+-        fc3   = L.FC(relu2, dim_out = 500)
+-        relu3 = L.ReLU(fc3)
+-        pred  = L.FC(relu3, "pred", dim_out = 10)
+-        loss  = L.SoftmaxWithLoss(pred, "loss", label = label)
+-
+-        # Net Instance
+-        self.net = mobula.Net()
+-
+-        # Set Loss Layer
+-        self.net.set_loss(loss)
+-
+-    @property
+-    def Y(self):
+-        return self.net["pred"].Y
+-
+-    @property
+-    def loss(self):
+-        return self.net["loss"].loss
+-
+-    @property
+-    def label(self):
+-        return self.net["data"](1).Y
+-
+-```````
+-
+-`/Users/mohdtahaabbas/swe/mobula/examples/mnist_kaggle.py`:
+-
+-```````py
+-from defines import *
+-import mobula
+-import mobula.layers as L
+-import mobula.solvers as S
+-import os
+-import sys
+-
+-def print_info():
+-    print ('''
+-* mnist_kaggle.py
+-Please download the dataset on Kaggle: https://www.kaggle.com/c/digit-recognizer
+-Then put train.csv and test.csv in the directory which mnist_kaggle.py is in. 
+-Usage:
+-    Recommend using Anaconda for better performance.
+-    Train:
+-        python mnist_kaggle.py train [MODEL] 
+-    Test:
+-        python mnist_kaggle.py test  MODEL
+-
+-    MODEL:  the file saving the weights of the network
+-    '''
+-    )
+-
+-
+-traning = True
+-model_file = None
+-
+-'''
+-if len(sys.argv) == 1:
+-    print_info()
+-    sys.exit()
+-else:
+-    phase = sys.argv[1].lower() 
+-    if phase == "train":
+-        traing = True
+-        if len(sys.argv) >= 3:
+-            model_file = sys.argv[2]
+-    elif phase == "test":
+-        traing = False
+-        if len(sys.argv) >= 3:
+-            model_file = sys.argv[2]
+-        else:
+-            print_info()
+-            sys.exit()
+-    else:
+-        print_info()
+-        sys.exit()
+-'''
+-
+-
+-INPUT_FILE = "./train.csv"
+-RESULT_PATH = "./mnist_kaggle"
+-
+-# Create the directory if it doesn't exists
+-if not os.path.exists(RESULT_PATH):
+-    os.mkdir(RESULT_PATH)
+-
+-# Load Data
+-try:
+-    fin = open(INPUT_FILE)
+-except:
+-    print ("%s doesn't exist. Please download the dataset on Kaggle: https://www.kaggle.com/c/digit-recognizer" % INPUT_FILE)
+-    import sys
+-    sys.exit()
+-
+-data = np.loadtxt(fin, delimiter = ",", skiprows = 1)
+-fin.close()
+-
+-n = len(data)
+-X = data[:, 1:]
+-labels = data[:, 0].astype(np.int)
+-# one-hot
+-#Y = np.eye(10)[labels.ravel()] 
+-print ("Read OK", n)
+-
+-Xmean = np.mean(X, 0)
+-np.save("xmean.npy", Xmean)
+-
+-# Subtract mean and normalize
+-X = (X - Xmean) / 255.0
+-
+-# transfer the shape of X to NCHW
+-# N, C, H, W = n, 1, 28, 28
+-X.resize((n, 1, 28, 28))
+-
+-# LeNet-5
+-data, label = L.Data([X, labels], "data", batch_size = 100)
+-conv1 = L.Conv(data, "conv1", dim_out = 20, kernel = 5)
+-pool1 = L.Pool(conv1, "pool1", pool = L.Pool.MAX, kernel = 2, stride = 2)
+-relu1 = L.ReLU(pool1, "relu1")
+-conv2 = L.Conv(relu1, "conv2", dim_out = 50, kernel = 5)
+-pool2 = L.Pool(conv2, "pool2", pool = L.Pool.MAX, kernel = 2, stride = 2)
+-relu2 = L.ReLU(pool2, "relu2")
+-fc3   = L.FC(relu2, "fc3", dim_out = 500)
+-relu3 = L.ReLU(fc3, "relu3")
+-pred  = L.FC(relu3, "pred", dim_out = 10)
+-loss = L.SoftmaxWithLoss(pred, "loss", label = label)
+-
+-# Net Instance
+-net = mobula.Net()
+-
+-# Set Loss Layer
+-net.set_loss(loss)
+-
+-# Set Solver
+-solver = S.Momentum(gamma = 0.1, stepsize = 1000)
+-solver.lr_policy = S.LR_POLICY.STEP
+-net.set_solver(S.Momentum())
+-
+-# Learning Rate
+-net.lr = 0.005
+-
+-'''
+-If start_iter > 0, load the existed model and continue to train.
+-Otherwise, initialize weights and start to train. 
+-'''
+-
+-start_iter = 0 
+-max_iter = 100000
+-filename = RESULT_PATH + "/kaggle%d.net"
+-if start_iter > 0:
+-    # Load the weights from the existed model
+-    net.load(filename % start_iter)
+-
+-for i in range(start_iter, max_iter):
+-    net.forward()
+-    net.backward()
+-
+-    if i % 100 == 0:
+-        print ("Iter: %d, Cost: %f" % (i, loss.loss))
+-        net.time()
+-
+-        # test 30 iteration
+-        vs = []
+-        for u in range(30):
+-            net.forward()
+-            pre = np.argmax(pred.Y,1).ravel()
+-            ra = label.Y.ravel()
+-            if u % 10 == 0: 
+-                print ((pre, ra))
+-            bs = (pre == ra) 
+-            b = np.mean(bs)
+-            vs.append(b)
+-        acc = np.mean(vs)
+-        print ("Accuracy: %f" % (acc))
+-        if i % 200 == 0 and acc > 0.95:
+-            net.save(filename % i)
+-
+-print ("Over :-)")
+-
+-```````
++        dvar = np.sum(np.multiply(dnx, xsm), self.valid_axes, keepdims=True) * (-0.5) * np.power(self.nd, 3.0)
++        dmean = -self.nd *
